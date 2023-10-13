@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@null</item>       <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- Custom EditText style -->
+    <style name="CustomEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:padding">12dp</item> <!-- Adjust padding as needed -->
+        <item name="android:gravity">center_vertical</item> <!-- Center vertically -->
+        <item name="hintTextColor">@color/mainBlue</item>
+        <item name="android:textColor">@color/black</item> <!-- Text color -->
+        <item name="android:textSize">16sp</item> <!-- Text size -->
+
+
+    </style>
+</resources>
