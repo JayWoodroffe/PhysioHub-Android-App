@@ -17,11 +17,15 @@ import com.google.firebase.messaging.FirebaseMessaging
 class Login : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //initialising firebase
+        firebaseAuth = FirebaseAuth.getInstance()
 
         //hidings status and navigation bar
         window.decorView.systemUiVisibility = (
@@ -40,7 +44,20 @@ class Login : AppCompatActivity() {
 
             binding.btnLogin.setOnClickListener {
                 //TODO add user authentication
-                startActivity(Intent(this, Home::class.java))
+                val email = binding.etEmail.text.toString()
+                val password = binding.etPassword.text.toString()
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener{
+                        if (it.isSuccessful)
+                        {
+                            startActivity(Intent(this, Home::class.java))
+                        }
+                        else
+                        {
+                            Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
             }
 
             binding.tvRegister.setOnClickListener {
