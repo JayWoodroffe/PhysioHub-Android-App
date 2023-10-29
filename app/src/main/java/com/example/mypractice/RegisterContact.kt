@@ -62,6 +62,7 @@ class RegisterContact : AppCompatActivity() {
             {startActivity(Intent(this, RegisterID::class.java))}
         }
 
+        //TODO add proper intent for value saving for all back buttons 
         binding.imBack.setOnClickListener{
             onBackPressed()
         }

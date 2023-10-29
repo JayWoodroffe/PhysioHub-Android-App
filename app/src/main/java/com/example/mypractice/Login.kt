@@ -36,36 +36,32 @@ class Login : AppCompatActivity() {
         
 
             //initialising firebase sdk
-            FirebaseApp.initializeApp(this)
-            val auth = FirebaseAuth.getInstance()
-            val firestore = FirebaseFirestore.getInstance()
-            val storage = FirebaseStorage.getInstance()
-            val messaging = FirebaseMessaging.getInstance()
+        FirebaseApp.initializeApp(this)
 
-            binding.btnLogin.setOnClickListener {
-                //TODO add user authentication
-                val email = binding.etEmail.text.toString()
-                val password = binding.etPassword.text.toString()
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener{
-                        if (it.isSuccessful)
-                        {
-                            startActivity(Intent(this, Home::class.java))
-                        }
-                        else
-                        {
-                            Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                        }
+        binding.btnLogin.setOnClickListener {
+            //TODO add user authentication
+            val email = binding.etEmail.text.toString()
+            val password = binding.etPassword.text.toString()
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener{
+                    if (it.isSuccessful)
+                    {
+                        startActivity(Intent(this, Home::class.java))
                     }
+                    else
+                    {
+                        Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
 
-            }
-
-            binding.tvRegister.setOnClickListener {
-                startActivity(Intent(this, RegisterContact::class.java))
-
-            }
         }
 
+        binding.tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterContact::class.java))
 
-
+        }
     }
+
+
+
+}
