@@ -42,17 +42,24 @@ class Login : AppCompatActivity() {
             //TODO add user authentication
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
-            firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener{
-                    if (it.isSuccessful)
-                    {
-                        startActivity(Intent(this, Home::class.java))
+            if (email?.isNullOrEmpty() == true || password?.isNullOrEmpty() == true)
+            {
+                Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener{
+                        if (it.isSuccessful)
+                        {
+                            startActivity(Intent(this, Home::class.java))
+                        }
+                        else
+                        {
+                            Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    else
-                    {
-                        Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
+            }
+
 
         }
 
