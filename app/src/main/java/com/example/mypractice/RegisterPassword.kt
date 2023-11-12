@@ -1,17 +1,15 @@
 package com.example.mypractice
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.databinding.ActivityRegisterPasswordBinding
-import com.google.android.gms.tasks.OnCompleteListener
+import com.example.mypractice.model.DocModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 
 class RegisterPassword : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterPasswordBinding
@@ -42,7 +40,7 @@ class RegisterPassword : AppCompatActivity() {
 
             //check if the password matches the requirements
             try {
-                DataRegistration.password = p1
+                DocModel.password = p1
 
                 if (p1 != p2){
                     binding.etPassword2.error = "Passwords don't match"
@@ -65,8 +63,8 @@ class RegisterPassword : AppCompatActivity() {
 
     private fun createUserDb () {
 
-        val email = DataRegistration.email
-        val password = DataRegistration.password
+        val email = DocModel.email
+        val password = DocModel.password
 
         //creates a user in the firebase authentication
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -91,11 +89,11 @@ class RegisterPassword : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         //creating the new user
         val user = hashMapOf(
-            "certId" to DataRegistration.certID,
-            "email" to DataRegistration.email,
-            "name" to DataRegistration.name,
-            "number" to DataRegistration.phone,
-            "practiceID" to DataRegistration.pracID,
+            "certId" to DocModel.certID,
+            "email" to DocModel.email,
+            "name" to DocModel.name,
+            "number" to DocModel.phone,
+            "practiceID" to DocModel.pracID,
         )
 
 
