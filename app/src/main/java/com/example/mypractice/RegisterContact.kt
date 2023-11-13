@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.mypractice.databinding.ActivityRegisterContactBinding
+import com.example.mypractice.model.DocModel
 
 class RegisterContact : AppCompatActivity() {
 
@@ -27,7 +28,7 @@ class RegisterContact : AppCompatActivity() {
             accepted = true
             //sending the name value to the singleton DataRegistration
             try {
-                    DataRegistration.name = binding.etName.text.toString()
+                    DocModel.name = binding.etName.text.toString()
                     binding.etName.setError(null)
                 }
             catch (e: IllegalArgumentException )
@@ -39,7 +40,7 @@ class RegisterContact : AppCompatActivity() {
 
             //sending email address
             try{
-                DataRegistration.email = binding.etEmail.text.toString()
+                DocModel.email = binding.etEmail.text.toString()
                 binding.etEmail.setError(null)
             }
             catch (e: IllegalArgumentException)
@@ -50,7 +51,7 @@ class RegisterContact : AppCompatActivity() {
 
             //sending phone number
             try{
-                DataRegistration.phone = binding.etNumber.text.toString()
+                DocModel.phone = binding.etNumber.text.toString()
                 binding.etNumber.setError(null)
             }
             catch (e: IllegalArgumentException)
@@ -62,6 +63,7 @@ class RegisterContact : AppCompatActivity() {
             {startActivity(Intent(this, RegisterID::class.java))}
         }
 
+        //TODO add proper intent for value saving for all back buttons 
         binding.imBack.setOnClickListener{
             onBackPressed()
         }

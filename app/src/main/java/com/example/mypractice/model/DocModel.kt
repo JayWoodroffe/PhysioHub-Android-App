@@ -1,6 +1,6 @@
-package com.example.mypractice
+package com.example.mypractice.model
 
-object DataRegistration {
+object DocModel {
     /*setters for the fields
     each setter checks the values to make sure they are valid
     returns an error with the appropriate error message if not

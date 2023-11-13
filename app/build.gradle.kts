@@ -49,10 +49,12 @@ dependencies {
 
     //add depeendencies for firebase products
     implementation ("com.google.firebase:firebase-auth:21.0.1") //authentication
-    implementation ("com.google.firebase:firebase-firestore:23.0.1")//firestore
+    implementation ("com.google.firebase:firebase-firestore-ktx")//firestore
     implementation ("com.google.firebase:firebase-storage:20.0.0")//storage
     implementation ("com.google.firebase:firebase-messaging:23.0.0")//cloud messaging
     implementation ("com.firebaseui:firebase-ui-auth:8.0.0")//UI
+    implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
+
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

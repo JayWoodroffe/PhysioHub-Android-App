@@ -17,11 +17,15 @@ import com.google.firebase.messaging.FirebaseMessaging
 class Login : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //initialising firebase
+        firebaseAuth = FirebaseAuth.getInstance()
 
         //hidings status and navigation bar
         window.decorView.systemUiVisibility = (
@@ -32,23 +36,39 @@ class Login : AppCompatActivity() {
         
 
             //initialising firebase sdk
-            FirebaseApp.initializeApp(this)
-            val auth = FirebaseAuth.getInstance()
-            val firestore = FirebaseFirestore.getInstance()
-            val storage = FirebaseStorage.getInstance()
-            val messaging = FirebaseMessaging.getInstance()
+        FirebaseApp.initializeApp(this)
 
-            binding.btnLogin.setOnClickListener {
-                //TODO add user authentication
-                startActivity(Intent(this, Home::class.java))
+        binding.btnLogin.setOnClickListener {
+            //TODO add user authentication
+            val email = binding.etEmail.text.toString()
+            val password = binding.etPassword.text.toString()
+            if (email?.isNullOrEmpty() == true || password?.isNullOrEmpty() == true)
+            {
+                Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener{
+                        if (it.isSuccessful)
+                        {
+                            startActivity(Intent(this, Home::class.java))
+                        }
+                        else
+                        {
+                            Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
             }
 
-            binding.tvRegister.setOnClickListener {
-                startActivity(Intent(this, RegisterContact::class.java))
 
-            }
         }
 
+        binding.tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterContact::class.java))
 
-
+        }
     }
+
+
+
+}

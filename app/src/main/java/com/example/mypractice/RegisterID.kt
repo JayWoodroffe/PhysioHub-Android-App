@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.mypractice.databinding.ActivityRegisterIdBinding
+import com.example.mypractice.model.DocModel
 
 class RegisterID : AppCompatActivity() {
 
@@ -25,7 +26,7 @@ class RegisterID : AppCompatActivity() {
         binding.btnNext.setOnClickListener{
             var accepted: Boolean = true
             try{
-                DataRegistration.certID = binding.etCertID.text.toString()
+                DocModel.certID = binding.etCertID.text.toString()
             }
             catch(e:IllegalArgumentException)
             {
@@ -34,7 +35,7 @@ class RegisterID : AppCompatActivity() {
             }
 
             try{
-                DataRegistration.pracID = binding.etPracID.text.toString()
+                DocModel.pracID = binding.etPracID.text.toString()
             }
             catch(e:IllegalArgumentException)
             {

@@ -1,14 +1,22 @@
 package com.example.mypractice
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mypractice.adapter.SearchClientRecyclerAdapter
 import com.example.mypractice.databinding.ActivityClientsBinding
+import com.example.mypractice.model.ClientModel
+import com.example.mypractice.utils.FirebaseUtil
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
 class Clients : AppCompatActivity() {
     private lateinit var binding: ActivityClientsBinding
+    private lateinit var  adapter: SearchClientRecyclerAdapter
+    private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientsBinding.inflate(layoutInflater)
@@ -24,6 +32,13 @@ class Clients : AppCompatActivity() {
         val navigationView = binding.btmNavMenu
         navigationView.selectedItemId = R.id.nav_clients
         navigationView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
+
+        setupSearchRecyclerView("");
+
+        binding.btnSearchClient.setOnClickListener {
+            val searchTerm = binding.etSearchClient.text.toString()
+            setupSearchRecyclerView(searchTerm)
+        }
 
     }
 
@@ -45,4 +60,47 @@ class Clients : AppCompatActivity() {
             else -> return false
         }
     }
+
+    fun setupSearchRecyclerView(searchTerm: String) {
+        //adds the clients to the recycler view
+        //TODO filter clients by doctorID
+        val query = if (searchTerm.isNotEmpty()) {
+            val searchTermLowerCase = searchTerm.lowercase()
+
+            FirebaseUtil.allClientCollectionReference()
+                .orderBy("name")
+                .startAt(searchTermLowerCase)
+                .endAt(searchTermLowerCase + "\uF8FF")
+        } else {
+            FirebaseUtil.allClientCollectionReference()
+        }
+
+        val options = FirestoreRecyclerOptions.Builder<ClientModel>()
+            .setQuery(query, ClientModel::class.java)
+            .build()
+
+        adapter = SearchClientRecyclerAdapter(options, applicationContext)
+        binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.clientRecyclerView.adapter = adapter
+        adapter.startListening()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter?.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter?.stopListening()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter?.startListening()
+    }
+
+
+
+
 }
