@@ -4,8 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/white"
     tools:context=".Appointments">
+
+
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/horScroll">
+
+        <LinearLayout
+            android:id="@+id/linLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <!---date sqrs will be added dynamically-->
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/horScroll"
+        android:paddingTop="16dp">
+
+        <LinearLayout
+            android:id="@+id/appointmentsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Appointments will be added here dynamically -->
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btmNavMenu"
@@ -18,12 +55,11 @@
         android:layout_marginBottom="30dp"
         android:background="@drawable/round_bar"
         android:elevation="2dp"
+        app:itemBackground="@android:color/transparent"
         app:itemIconSize="25dp"
         app:itemIconTint="@drawable/icon_selector"
         app:itemRippleColor="@android:color/transparent"
-        app:itemBackground="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/icon_menu"
-        />
+        app:menu="@menu/icon_menu" />
 
 </RelativeLayout>

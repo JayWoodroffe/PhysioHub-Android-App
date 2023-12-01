@@ -60,5 +60,34 @@ class FirebaseUtil {
                 }
             }
         }
+
+        fun getDoctorCertIdByEmail(callback: (String?) -> Unit) {
+            currentDocEmail { doctorEmail ->
+                if (doctorEmail != null) {
+                    val doctorsCollection = FirebaseFirestore.getInstance().collection("doctors")
+
+                    doctorsCollection
+                        .whereEqualTo("email", doctorEmail)
+                        .get()
+                        .addOnSuccessListener { querySnapshot ->
+                            if (!querySnapshot.isEmpty) {
+                                val doctorDocument = querySnapshot.documents[0]
+                                val certId = doctorDocument.getString("certId")
+                                callback(certId)
+                            } else {
+                                // No doctor found with the provided email
+                                callback(null)
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle failure
+                            callback(null)
+                        }
+                } else {
+                    // Failed to get the current user's email
+                    callback(null)
+                }
+            }
+        }
     }
 }

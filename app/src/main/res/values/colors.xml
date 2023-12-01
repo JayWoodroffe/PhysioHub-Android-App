@@ -5,4 +5,12 @@
     <color name="light_white">#E9F0F2</color>
     <color name="mainBlue">#0B82CC</color>
     <color name="secondary">#A6BC09</color>
+    <color name="monday">#3D5688</color>
+    <color name="tuesday">#5373A1</color>
+    <color name="wednesday">#7294B7</color>
+    <color name="thursday">#9DA3B7</color>
+    <color name="friday">#CBCBCB</color>
+    <color name="saturday">#F9D69E</color>
+    <color name="sunday">#F6BD73</color>
+
 </resources>
