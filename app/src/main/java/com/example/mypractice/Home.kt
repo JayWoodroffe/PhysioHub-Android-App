@@ -1,16 +1,14 @@
 package com.example.mypractice
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.databinding.ActivityHomeBinding
-import com.example.mypractice.databinding.ActivityMainBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.mypractice.utils.FirebaseUtil
 import java.util.Calendar
+
 
 class Home : AppCompatActivity() {
 
@@ -28,9 +26,15 @@ class Home : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 )
+
+
         //setting the greeting
         binding.tvGreeting.setText(getGreeting())
-        binding.tvName.setText("Dr. Jay Woodroffe")
+        FirebaseUtil.getDoctorNameByEmail { name ->
+            binding.tvName.setText("Dr. " + name)
+        }
+        binding.gif.setImageResource(getGif())
+
 
 
         //changing the activity when menu item is selected
@@ -68,5 +72,17 @@ class Home : AppCompatActivity() {
             else -> ""
         }
 
+    }
+
+    fun getGif(): Int {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        return when (hour) {
+            in 0..11 -> R.drawable.ic_day
+            in 12..16 -> R.drawable.ic_aft
+            in 17..23 -> R.drawable.ic_evening
+            else -> R.drawable.ic_day
+        }
     }
 }

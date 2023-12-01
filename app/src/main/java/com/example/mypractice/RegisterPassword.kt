@@ -115,11 +115,11 @@ class RegisterPassword : AppCompatActivity() {
                     val userData = document.data
                     val username = userData["name"] as String
                     val email = userData["email"] as String
-                    Toast.makeText(
-                        this@RegisterPassword,
-                        "welcome " + username + "!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        this@RegisterPassword,
+//                        "welcome " + username + "!",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                 }
 
             }
@@ -129,6 +129,7 @@ class RegisterPassword : AppCompatActivity() {
                         this@RegisterPassword,
                         "didnt add right",
                         Toast.LENGTH_SHORT
+                        //TODO handle error event correctly
                     ).show()
                 }
             }

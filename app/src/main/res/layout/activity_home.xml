@@ -29,11 +29,21 @@
         <TextView
             android:id="@+id/tvName"
             android:textStyle="bold"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvGreeting"
             android:textAlignment="viewStart"
             android:textSize="30sp" />
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_toRightOf="@id/tvName"
+            android:layout_below="@id/tvGreeting"
+            android:scaleType="fitCenter"
+            android:layerType="software"
+            android:layout_marginStart="80dp"
+            android:src="@drawable/ic_day"
+            android:id="@+id/gif"/>
 
         <View
             android:id="@+id/view2"

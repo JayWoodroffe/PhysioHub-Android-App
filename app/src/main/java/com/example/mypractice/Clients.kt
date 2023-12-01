@@ -12,11 +12,13 @@ import com.example.mypractice.databinding.ActivityClientsBinding
 import com.example.mypractice.model.ClientModel
 import com.example.mypractice.utils.FirebaseUtil
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.Query
 
 class Clients : AppCompatActivity() {
     private lateinit var binding: ActivityClientsBinding
     private lateinit var  adapter: SearchClientRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
+    private var query: Query? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientsBinding.inflate(layoutInflater)
@@ -38,6 +40,7 @@ class Clients : AppCompatActivity() {
         binding.btnSearchClient.setOnClickListener {
             val searchTerm = binding.etSearchClient.text.toString()
             setupSearchRecyclerView(searchTerm)
+
         }
 
     }
@@ -61,16 +64,17 @@ class Clients : AppCompatActivity() {
         }
     }
 
-    fun setupSearchRecyclerView(searchTerm: String) {
+    private fun setupSearchRecyclerView(searchTerm: String) {
         //adds the clients to the recycler view
         //TODO filter clients by doctorID
+
+        //TODO make the search non-case sensetive
         val query = if (searchTerm.isNotEmpty()) {
-            val searchTermLowerCase = searchTerm.lowercase()
 
             FirebaseUtil.allClientCollectionReference()
                 .orderBy("name")
-                .startAt(searchTermLowerCase)
-                .endAt(searchTermLowerCase + "\uF8FF")
+                .startAt(searchTerm)
+                .endAt(searchTerm + "\uF8FF")
         } else {
             FirebaseUtil.allClientCollectionReference()
         }
@@ -82,6 +86,19 @@ class Clients : AppCompatActivity() {
         adapter = SearchClientRecyclerAdapter(options, applicationContext)
         binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.clientRecyclerView.adapter = adapter
+
+        // Set onItemClick listener
+        adapter.onItemClick = { position, clientId ->
+            val selectedClientModel = adapter.getItem(position)
+
+            //  pass the selected client information to the ClientDetails activity
+            val intent = Intent(this, ClientDetails::class.java).apply {
+                putExtra("clientId", clientId)
+                // Add other details as needed
+            }
+            startActivity(intent)
+        }
+
         adapter.startListening()
     }
 
@@ -104,3 +121,4 @@ class Clients : AppCompatActivity() {
 
 
 }
+

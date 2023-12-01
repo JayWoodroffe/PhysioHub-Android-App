@@ -15,11 +15,14 @@
         android:theme="@style/Theme.LoginAndSignUp"
         tools:targetApi="31">
         <activity
+            android:name=".ClientDetails"
+            android:exported="false" />
+        <activity
             android:name=".RegisterID"
             android:exported="false" />
         <activity
             android:name=".RegisterPassword"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".RegisterContact"
             android:exported="false" />
@@ -28,7 +31,7 @@
             android:exported="false" />
         <activity
             android:name=".Appointments"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".Clients"
             android:exported="false" />
