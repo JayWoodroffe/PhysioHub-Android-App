@@ -21,6 +21,11 @@ class FirebaseUtil {
             return FirebaseFirestore.getInstance().collection("users")
         }
 
+        fun allAppointmentsCollectionReference(): CollectionReference{
+            return FirebaseFirestore.getInstance().collection("appointments")
+        }
+
+
         fun currentDocId(): String {
             return FirebaseAuth.getInstance().toString()
         }

@@ -12,5 +12,7 @@
     <color name="friday">#CBCBCB</color>
     <color name="saturday">#F9D69E</color>
     <color name="sunday">#F6BD73</color>
+    <color name="light_grey">#d3d3d3</color>
+
 
 </resources>
