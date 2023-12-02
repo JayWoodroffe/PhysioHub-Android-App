@@ -1,5 +1,6 @@
 package com.example.mypractice.utils
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -66,6 +67,20 @@ class FirebaseUtil {
             }
         }
 
+        fun addClientToDb(clientData: HashMap<String, Comparable<*>?>){
+                //add client to the firestore
+                val db = FirebaseFirestore.getInstance()
+
+                //adding the new document with a generated ID
+                db.collection("users")
+                    .add(clientData)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("Tag", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Tag", "Error adding document", e)
+                    }
+        }
         fun getDoctorCertIdByEmail(callback: (String?) -> Unit) {
             currentDocEmail { doctorEmail ->
                 if (doctorEmail != null) {

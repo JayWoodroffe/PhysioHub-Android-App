@@ -50,6 +50,13 @@ class Clients : AppCompatActivity() {
 
         }
 
+        binding.btnAddNew.setOnClickListener {
+            val intent = Intent(this, AddClient::class.java)
+            Log.d("Tag", "doc id to send to new act: " + certId)
+            intent.putExtra("docId", certId)
+            startActivity(intent)
+        }
+
     }
     private fun setupDoctorCertId(callback: () -> Unit) {
         FirebaseUtil.getDoctorCertIdByEmail { obtainedCertId ->
@@ -84,7 +91,6 @@ class Clients : AppCompatActivity() {
         //adds the clients to the recycler view
 
         Log.d("filter", "docId: " + certId)
-        //TODO make the search non-case sensetive
         val query = if (searchTerm.isNotEmpty()) {
 
             var lowerCaseSearchTerm = searchTerm.toLowerCase(Locale.getDefault())
@@ -97,7 +103,7 @@ class Clients : AppCompatActivity() {
                 .whereLessThanOrEqualTo("searchField", lowerCaseSearchTerm + "\uF8FF")
         } else {
 
-            FirebaseUtil.allClientCollectionReference().whereEqualTo("doctorID", certId)
+            FirebaseUtil.allClientCollectionReference().orderBy("searchField").whereEqualTo("doctorID", certId)
         }
 
         val options = FirestoreRecyclerOptions.Builder<ClientModel>()

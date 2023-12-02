@@ -36,4 +36,23 @@
         <item name="android:singleLine">true</item>
     </style>
 
+
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Other style attributes -->
+        <item name="colorAccent">@color/mainBlue</item>
+        <!-- Add the following attributes to include OK and Cancel buttons -->
+        <item name="android:buttonBarPositiveButtonStyle">@style/MyPositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/MyNegativeButtonStyle</item>
+    </style>
+
+
+    <style name="MyPositiveButtonStyle" parent="@android:style/Widget.Button">
+        <!-- Customize positive button style if needed -->
+    </style>
+
+    <style name="MyNegativeButtonStyle" parent="@android:style/Widget.Button">
+        <!-- Customize negative button style if needed -->
+    </style>
+
+
 </resources>

@@ -31,7 +31,7 @@
         android:textColor="@color/light_grey"
         android:text="01 December 2023"
         android:textSize="16sp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:textStyle="bold"
         android:layout_alignStart="@id/tvDayofWeek"
         android:id="@+id/tvDate"
@@ -50,6 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tvDayofWeek"
+        android:layout_above="@id/btmNavMenu"
         android:paddingTop="16dp">
 
         <LinearLayout
@@ -64,7 +65,14 @@
 
 
 
-
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_add"
+        android:background="@drawable/circle_blue"
+        android:layout_above="@id/btmNavMenu"
+        android:layout_alignRight="@id/btmNavMenu"
+        android:id="@+id/btnAddNew"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btmNavMenu"
@@ -72,7 +80,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/round_bar"

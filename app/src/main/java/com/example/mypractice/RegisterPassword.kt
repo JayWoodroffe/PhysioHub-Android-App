@@ -108,31 +108,31 @@ class RegisterPassword : AppCompatActivity() {
             }
 
         //checking if the data is added
-        db.collection("doctors")
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val userData = document.data
-                    val username = userData["name"] as String
-                    val email = userData["email"] as String
+//        db.collection("doctors")
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                for (document in documents) {
+//                    val userData = document.data
+//                    val username = userData["name"] as String
+//                    val email = userData["email"] as String
+////                    Toast.makeText(
+////                        this@RegisterPassword,
+////                        "welcome " + username + "!",
+////                        Toast.LENGTH_SHORT
+////                    ).show()
+////                }
+//
+//            }
+//            .addOnFailureListener { exception ->
+//                runOnUiThread {
 //                    Toast.makeText(
 //                        this@RegisterPassword,
-//                        "welcome " + username + "!",
+//                        "didnt add right",
 //                        Toast.LENGTH_SHORT
+//                        //TODO handle error event correctly
 //                    ).show()
-                }
-
-            }
-            .addOnFailureListener { exception ->
-                runOnUiThread {
-                    Toast.makeText(
-                        this@RegisterPassword,
-                        "didnt add right",
-                        Toast.LENGTH_SHORT
-                        //TODO handle error event correctly
-                    ).show()
-                }
-            }
+//                }
+//            }
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
 
