@@ -15,6 +15,9 @@
         android:theme="@style/Theme.LoginAndSignUp"
         tools:targetApi="31">
         <activity
+            android:name=".AddClient"
+            android:exported="false" />
+        <activity
             android:name=".ClientDetails"
             android:exported="false" />
         <activity

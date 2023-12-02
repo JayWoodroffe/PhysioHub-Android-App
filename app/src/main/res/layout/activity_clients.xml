@@ -25,7 +25,7 @@
             android:textSize="30dp"
             android:layout_centerVertical="true"
             android:background="@drawable/round_bar_blue"/>
-        <ImageButton
+        <!--<ImageButton
             android:id="@+id/searchButton"
             android:layout_width="45dp"
             android:layout_height="45dp"
@@ -33,7 +33,7 @@
             android:layout_alignParentEnd="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"/>-->
 
     </RelativeLayout>
     <RelativeLayout
@@ -43,16 +43,20 @@
         android:layout_margin="10dp"
         android:id="@+id/search_user_layout">
 
+        <!--TODO format like login ET-->
         <EditText
+            android:id="@+id/etSearchClient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/circular_background"
-            android:layout_margin="10dp"
-            android:hint="Username"
-            android:padding="10dp"
-            android:elevation="4dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_toLeftOf="@id/btnSearchClient"
-            android:id="@+id/etSearchClient"/>
+            android:background="@drawable/circular_background"
+            android:elevation="4dp"
+            android:hint="Username"
+            android:padding="10dp" />
 
         <ImageButton
             android:id="@+id/btnSearchClient"
@@ -80,13 +84,21 @@
         android:id="@+id/clientRecyclerView"
         />
 
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_add"
+        android:background="@drawable/circle_blue"
+        android:layout_above="@id/btmNavMenu"
+        android:layout_alignRight="@id/btmNavMenu"/>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btmNavMenu"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/round_bar"

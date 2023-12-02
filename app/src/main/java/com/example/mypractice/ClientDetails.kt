@@ -80,7 +80,7 @@ class ClientDetails : AppCompatActivity() {
             }
 
         //call button
-        binding.ivCall.setOnClickListener {
+        binding.tvNumberData.setOnClickListener {
 
             val dialIntent = Intent (Intent.ACTION_DIAL, Uri.parse("tel:$number"))
             // Check if there is an app that can handle the Intent before starting

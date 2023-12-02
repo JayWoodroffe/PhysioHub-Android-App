@@ -2,6 +2,7 @@ package com.example.mypractice
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -13,12 +14,14 @@ import com.example.mypractice.model.ClientModel
 import com.example.mypractice.utils.FirebaseUtil
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
+import java.util.Locale
 
 class Clients : AppCompatActivity() {
     private lateinit var binding: ActivityClientsBinding
     private lateinit var  adapter: SearchClientRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private var query: Query? = null
+    private var certId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientsBinding.inflate(layoutInflater)
@@ -35,7 +38,11 @@ class Clients : AppCompatActivity() {
         navigationView.selectedItemId = R.id.nav_clients
         navigationView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
 
-        setupSearchRecyclerView("");
+        setupDoctorCertId {
+            // This block is executed once the certId is obtained
+            setupSearchRecyclerView("")
+        }
+
 
         binding.btnSearchClient.setOnClickListener {
             val searchTerm = binding.etSearchClient.text.toString()
@@ -44,6 +51,15 @@ class Clients : AppCompatActivity() {
         }
 
     }
+    private fun setupDoctorCertId(callback: () -> Unit) {
+        FirebaseUtil.getDoctorCertIdByEmail { obtainedCertId ->
+            if (obtainedCertId != null) {
+                certId = obtainedCertId.toInt()
+            }
+            callback.invoke() // Call the callback once the certId is obtained
+        }
+    }
+
 
     private fun handleNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
@@ -66,17 +82,22 @@ class Clients : AppCompatActivity() {
 
     private fun setupSearchRecyclerView(searchTerm: String) {
         //adds the clients to the recycler view
-        //TODO filter clients by doctorID
 
+        Log.d("filter", "docId: " + certId)
         //TODO make the search non-case sensetive
         val query = if (searchTerm.isNotEmpty()) {
 
+            var lowerCaseSearchTerm = searchTerm.toLowerCase(Locale.getDefault())
             FirebaseUtil.allClientCollectionReference()
-                .orderBy("name")
-                .startAt(searchTerm)
-                .endAt(searchTerm + "\uF8FF")
+                .orderBy("searchField")
+                .whereEqualTo("doctorID", certId)
+                   //.startAt(searchTerm)
+                    //.endAt(searchTerm + "\uF8FF")
+                .whereGreaterThanOrEqualTo("searchField", lowerCaseSearchTerm)
+                .whereLessThanOrEqualTo("searchField", lowerCaseSearchTerm + "\uF8FF")
         } else {
-            FirebaseUtil.allClientCollectionReference()
+
+            FirebaseUtil.allClientCollectionReference().whereEqualTo("doctorID", certId)
         }
 
         val options = FirestoreRecyclerOptions.Builder<ClientModel>()
@@ -86,6 +107,7 @@ class Clients : AppCompatActivity() {
         adapter = SearchClientRecyclerAdapter(options, applicationContext)
         binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.clientRecyclerView.adapter = adapter
+
 
         // Set onItemClick listener
         adapter.onItemClick = { position, clientId ->
@@ -104,17 +126,23 @@ class Clients : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        adapter?.startListening()
+        if (::adapter.isInitialized) {
+            adapter.startListening()
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        adapter?.stopListening()
+        if (::adapter.isInitialized) {
+            adapter.stopListening()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        adapter?.startListening()
+        if (::adapter.isInitialized) {
+            adapter.startListening()
+        }
     }
 
 

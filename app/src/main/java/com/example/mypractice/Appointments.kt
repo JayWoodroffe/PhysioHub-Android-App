@@ -142,7 +142,6 @@ class Appointments : AppCompatActivity() {
         val appointmentsList = mutableListOf<Appointment>()
         //querying the doctors appointments for the selected day using their certId
         var certId = FirebaseUtil.getDoctorCertIdByEmail { certId ->
-            Log.d("appointments", "doctor id: " + certId)
             val appointmentsCollectionRef = FirebaseUtil.allAppointmentsCollectionReference()
 
             val query = appointmentsCollectionRef
