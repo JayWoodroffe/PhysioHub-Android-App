@@ -1,10 +1,13 @@
 package com.example.mypractice.utils
 
 import android.util.Log
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import java.util.Locale
 
 //for methods related to firebase that may be used frequently
 class FirebaseUtil {
@@ -29,6 +32,31 @@ class FirebaseUtil {
 
         fun currentDocId(): String {
             return FirebaseAuth.getInstance().toString()
+        }
+        fun getAllClientsForDoctorQuery(certId: String): Query {
+            var certIdInt = certId.toInt()
+            return allClientCollectionReference()
+                .orderBy("searchField")
+                .whereEqualTo("doctorID", certIdInt)
+        }
+
+        fun addAppointment(clientName: String, docId: Int, timestamp: Timestamp) {
+            val appointmentData = hashMapOf(
+                "clientName" to clientName,
+                "date" to timestamp,
+                "doctorCertId" to docId
+            )
+
+            firestore.collection("appointments")
+                .add(appointmentData)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("tag", "Appointment added with ID: ${documentReference.id}")
+                    // Handle success
+                }
+                .addOnFailureListener { e ->
+                    Log.e("tag", "Error adding appointment", e)
+                    // Handle failure
+                }
         }
 
 
@@ -67,6 +95,20 @@ class FirebaseUtil {
             }
         }
 
+        fun getClientQuery(certId: Int?, searchTerm: String): Query {
+            val baseQuery = allClientCollectionReference()
+                .orderBy("searchField")
+                .whereEqualTo("doctorID", certId)
+
+            return if (searchTerm.isNotEmpty()) {
+                val lowerCaseSearchTerm = searchTerm.toLowerCase(Locale.getDefault())
+                baseQuery
+                    .whereGreaterThanOrEqualTo("searchField", lowerCaseSearchTerm)
+                    .whereLessThanOrEqualTo("searchField", lowerCaseSearchTerm + "\uF8FF")
+            } else {
+                baseQuery
+            }
+        }
         fun addClientToDb(clientData: HashMap<String, Comparable<*>?>){
                 //add client to the firestore
                 val db = FirebaseFirestore.getInstance()

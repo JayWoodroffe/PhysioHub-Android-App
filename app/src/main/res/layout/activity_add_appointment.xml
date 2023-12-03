@@ -1,9 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddAppointment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/imBack"
+        android:src="@drawable/ic_back"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:tint="@color/mainBlue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create appointment"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/mainBlue"
+        android:layout_alignTop="@id/imBack"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tvTitle"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Client: "
+        android:layout_below="@id/tvTitle"
+        android:layout_alignStart="@id/imBack"
+        android:layout_marginTop="30dp"
+        android:textSize="17sp"
+        android:id="@+id/tvClient"
+        android:textColor="@color/light_grey"/>
+
+    <Spinner
+        android:id="@+id/spinClients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvClient"
+        android:layout_alignTop="@id/tvClient"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="16dp"
+        android:scrollbarSize="40dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date: "
+        android:textColor="@color/light_grey"
+        android:layout_below="@id/tvClient"
+        android:layout_alignStart="@id/imBack"
+        android:layout_marginTop="30dp"
+        android:textSize="17sp"
+        android:id="@+id/tvDate"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="select date"
+        android:textStyle="italic"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/tvClient"
+        android:layout_alignStart="@id/spinClients"
+        android:layout_marginTop="30dp"
+        android:textSize="17sp"
+        android:id="@+id/tvSelectDate"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="select"
+        android:layout_below="@id/spinClients"
+        android:layout_marginTop="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:textSize="10sp"
+        android:backgroundTint="@color/mainBlue"
+        android:id="@+id/btnSelDate"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time: "
+
+        android:textColor="@color/light_grey"
+        android:layout_below="@id/tvDate"
+        android:layout_alignStart="@id/imBack"
+        android:layout_marginTop="30dp"
+        android:textSize="17sp"
+        android:id="@+id/tvTime"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="select time"
+        android:textStyle="italic"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/tvDate"
+        android:layout_alignStart="@id/spinClients"
+        android:layout_marginTop="30dp"
+        android:textSize="17sp"
+        android:id="@+id/tvSelectTime"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="select"
+        android:layout_below="@id/btnSelDate"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:textSize="10sp"
+        android:backgroundTint="@color/mainBlue"
+        android:id="@+id/btnSelTime"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/tvTime"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="@color/mainBlue"
+        android:text="create appointment"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btnCreateApp"/>
+
+
+</RelativeLayout>

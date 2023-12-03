@@ -17,16 +17,20 @@ import com.example.mypractice.model.Appointment
 import com.example.mypractice.utils.FirebaseUtil
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
 
 class Appointments : AppCompatActivity() {
 
     private lateinit var binding : ActivityAppointmentsBinding
     //global variable to store the currently selected date square
     private var selectedDateSquare: LinearLayout? = null
+
+    private var currentDateSelected: Calendar = Calendar.getInstance()
 
     // Define a map to store the original background colors based on the day of the week
     //this is to ensure that after a date item is deselected, it can return back to its initial color
@@ -45,6 +49,12 @@ class Appointments : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 )
 
+        binding.btnAddNew.setOnClickListener {
+            val intent = Intent(this, AddAppointment::class.java)
+            intent.putExtra("calendarExtra", currentDateSelected as Serializable?)
+            startActivity(intent)
+        }
+
         val navigationView = binding.btmNavMenu
         navigationView.selectedItemId = R.id.nav_appointments
         navigationView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
@@ -62,16 +72,13 @@ class Appointments : AppCompatActivity() {
         val dateSquareWidth = 130 // Adjust the width as needed
         val dateSquareMargin = 10 // Adjust the margin as needed
 
-        // Calculate total width of all date squares
-        val totalWidth = (dateSquareWidth + dateSquareMargin * 2) * (numberOfDays * 2)
+
 
         for (i in 0..numberOfDays) {
             val dateSquare = inflater.inflate(R.layout.item_date_sqr, null) as LinearLayout
             val params = LinearLayout.LayoutParams(dateSquareWidth, LinearLayout.LayoutParams.WRAP_CONTENT)
             params.setMargins(dateSquareMargin, 0, dateSquareMargin, 0)
             dateSquare.layoutParams = params
-
-
 
             val cal = Calendar.getInstance()
             cal.add(Calendar.DAY_OF_MONTH, i)
@@ -114,6 +121,7 @@ class Appointments : AppCompatActivity() {
 
         // Set the initial selected date to the current date
         val initialSelectedDate = Calendar.getInstance()
+        initialSelectedDate.set(Calendar.HOUR_OF_DAY, 0)
         selectedDateSquare = binding.linLayout.getChildAt(numberOfDays) as? LinearLayout
         selectedDateSquare?.setBackgroundResource(R.drawable.selected_border)
         updateAppointmentsForDate(initialSelectedDate)
@@ -176,10 +184,24 @@ class Appointments : AppCompatActivity() {
         }
     }
 
+    private fun formatTimestamp(timestamp: Timestamp): String {
+        // Create a SimpleDateFormat instance with the desired format
+        val sdf = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale.getDefault())
+
+        // Convert Timestamp to Date and format it
+        val date = timestamp.toDate()
+        return sdf.format(date)
+    }
     private fun displayAppointments(dayStart:Timestamp, dayEnd:Timestamp)
     {
+        val formattedTimestamp1 = formatTimestamp(dayStart)
+        val formattedTimestamp2 = formatTimestamp(dayEnd)
+        Log.d("appt", "Timestamp 1: $formattedTimestamp1")
+        Log.d("appt", "Timestamp 2: $formattedTimestamp2")
         //setting up appointments for current day
         getAppointments(dayStart, dayEnd) { appointmentsList ->
+
+
             // Handle the result here
             Log.d("appointments", "number of appointments received: " + appointmentsList.size)
             val appointmentsLayout: LinearLayout = binding.appointmentsLayout
@@ -319,6 +341,7 @@ class Appointments : AppCompatActivity() {
         // Extract the month from the selected date
         val selectedDate = cal.time
 
+        currentDateSelected = cal
         // Update information based on the selected date (e.g., fetch appointments)
         updateAppointmentsForDate(cal)
     }

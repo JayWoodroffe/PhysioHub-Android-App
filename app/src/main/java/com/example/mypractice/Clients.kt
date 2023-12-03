@@ -14,7 +14,6 @@ import com.example.mypractice.model.ClientModel
 import com.example.mypractice.utils.FirebaseUtil
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
-import java.util.Locale
 
 class Clients : AppCompatActivity() {
     private lateinit var binding: ActivityClientsBinding
@@ -89,22 +88,9 @@ class Clients : AppCompatActivity() {
 
     private fun setupSearchRecyclerView(searchTerm: String) {
         //adds the clients to the recycler view
+        Log.d("filter", "docId: $certId")
 
-        Log.d("filter", "docId: " + certId)
-        val query = if (searchTerm.isNotEmpty()) {
-
-            var lowerCaseSearchTerm = searchTerm.toLowerCase(Locale.getDefault())
-            FirebaseUtil.allClientCollectionReference()
-                .orderBy("searchField")
-                .whereEqualTo("doctorID", certId)
-                   //.startAt(searchTerm)
-                    //.endAt(searchTerm + "\uF8FF")
-                .whereGreaterThanOrEqualTo("searchField", lowerCaseSearchTerm)
-                .whereLessThanOrEqualTo("searchField", lowerCaseSearchTerm + "\uF8FF")
-        } else {
-
-            FirebaseUtil.allClientCollectionReference().orderBy("searchField").whereEqualTo("doctorID", certId)
-        }
+        val query = FirebaseUtil.getClientQuery(certId, searchTerm)
 
         val options = FirestoreRecyclerOptions.Builder<ClientModel>()
             .setQuery(query, ClientModel::class.java)
@@ -113,7 +99,6 @@ class Clients : AppCompatActivity() {
         adapter = SearchClientRecyclerAdapter(options, applicationContext)
         binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.clientRecyclerView.adapter = adapter
-
 
         // Set onItemClick listener
         adapter.onItemClick = { position, clientId ->
