@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.databinding.ActivityAddAppointmentBinding
@@ -90,7 +91,13 @@ class AddAppointment : AppCompatActivity() {
                 val selectedClient: String = binding.spinClients.selectedItem as String
                 val timestamp: Timestamp = getCombinedDateTime()
                 docId?.let { it1 -> FirebaseUtil.addAppointment(selectedClient, it1, timestamp) }
+                startActivity(Intent(this, Appointments::class.java))
             }
+            else
+            {
+                Toast.makeText(this, "Please fill in all the required data", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 

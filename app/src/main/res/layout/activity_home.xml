@@ -29,6 +29,7 @@
         <TextView
             android:id="@+id/tvName"
             android:textStyle="bold"
+            android:textColor="@color/mainBlue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvGreeting"
@@ -38,7 +39,8 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_toRightOf="@id/tvName"
-            android:layout_below="@id/tvGreeting"
+            android:layout_alignTop="@id/tvGreeting"
+            android:layout_marginTop="5dp"
             android:scaleType="fitCenter"
             android:layerType="software"
             android:layout_marginStart="80dp"
@@ -55,83 +57,36 @@
             android:id="@+id/tvApp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/todays_appointments"
+            android:text="your next appointment"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_below="@id/view2"/>
 
-        <!--constraint layout for the calendar-->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvApp">
+            android:layout_below="@id/tvApp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_bar_light_white"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <!-- hours-->
             <TextView
-                android:id="@+id/tvhour1"
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:layout_constraintHorizontal_bias="0"/>
-            <TextView
-                android:id="@+id/tvhour2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                app:layout_constraintTop_toBottomOf="@+id/tvhour1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0.3"
-                app:layout_constraintHorizontal_bias="0"/>
-            <TextView
-                android:id="@+id/tvhour3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                app:layout_constraintTop_toBottomOf="@+id/tvhour2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="1"
-                app:layout_constraintHorizontal_bias="0"/>
-            <TextView
-                android:id="@+id/tvhour4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4"
-                app:layout_constraintTop_toBottomOf="@+id/tvhour3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintHorizontal_bias="0"/>
-            <TextView
-                android:id="@+id/tvhour5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5"
-                app:layout_constraintTop_toBottomOf="@+id/tvhour4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintHorizontal_bias="0"/>
-            <TextView
-                android:id="@+id/tvhour6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6"
-                app:layout_constraintTop_toBottomOf="@+id/tvhour5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintHorizontal_bias="0"/>
+                android:text="7:00 AM"
+                android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvClientName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Client Name" />
+        </LinearLayout>
+
     </RelativeLayout>
     <!--navigation bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

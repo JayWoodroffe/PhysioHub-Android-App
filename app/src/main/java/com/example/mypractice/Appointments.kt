@@ -162,8 +162,6 @@ class Appointments : AppCompatActivity() {
             // Execute the query
             query.get()
                 .addOnSuccessListener { documents ->
-
-
                     for (document in documents) {
                         // Parse and process each appointment document
                         val time = document.getTimestamp("date")?.toDate()

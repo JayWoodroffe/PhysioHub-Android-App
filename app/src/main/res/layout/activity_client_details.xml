@@ -160,7 +160,7 @@
         android:layout_alignStart="@id/tvEmailData"
         android:id="@+id/tvNextAppData"/>
 
-    <Button
+    <!--<Button
         android:id="@+id/btnNewAppointment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="25dp"
         android:backgroundTint="@color/mainBlue"
-        android:text="Create Next Appointment" />
+        android:text="Create Next Appointment" />-->
 
 
 </RelativeLayout>

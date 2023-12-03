@@ -41,8 +41,9 @@
         android:layout_height="wrap_content"
         android:text="Thursday"
         android:textSize="27sp"
-        android:layout_marginStart="50dp"
+
         android:id="@+id/tvDayofWeek"
+        android:layout_alignStart="@id/scroll"
         android:layout_below="@id/tvDate"/>
 
 
@@ -51,14 +52,17 @@
         android:layout_height="match_parent"
         android:layout_below="@id/tvDayofWeek"
         android:layout_above="@id/btmNavMenu"
-        android:paddingTop="16dp">
+        android:id="@+id/scroll"
+        android:paddingTop="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
 
         <LinearLayout
             android:id="@+id/appointmentsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            >
             <!-- Appointments will be added here dynamically -->
         </LinearLayout>
     </ScrollView>

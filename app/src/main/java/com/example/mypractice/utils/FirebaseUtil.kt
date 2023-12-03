@@ -41,11 +41,14 @@ class FirebaseUtil {
         }
 
         fun addAppointment(clientName: String, docId: Int, timestamp: Timestamp) {
+            val docIDstring = ""+docId
             val appointmentData = hashMapOf(
                 "clientName" to clientName,
                 "date" to timestamp,
-                "doctorCertId" to docId
+                "doctorCertId" to docIDstring
             )
+
+            //TODO nextsemester ensure continuity between the storage of docId/certId as an integer and a string between clients, appts and doctors
 
             firestore.collection("appointments")
                 .add(appointmentData)

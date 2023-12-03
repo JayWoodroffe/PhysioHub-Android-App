@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/round_bar"
-    android:layout_margin="10dp"
-    android:elevation="2dp">
+    android:background="@drawable/round_bar_light_white"
+    android:layout_margin="10dp">
 
     <include layout = "@layout/profile_pictureview"
         android:layout_width="52dp"
@@ -20,12 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User name"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="18sp"
             android:id="@+id/tvUserName"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="+0000000000"
             android:id="@+id/tvUserSubText"/>
     </LinearLayout>
