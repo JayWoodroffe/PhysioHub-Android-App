@@ -51,6 +51,20 @@ class Home : AppCompatActivity() {
         navigationView.selectedItemId = R.id.nav_home
         navigationView.setOnItemSelectedListener { item: MenuItem-> handleNavigationItemSelected(item)}
 
+        //setting up the notepad
+        // Check if the fragment container exists in the layout
+        val container = binding.notepadContainer
+
+        if (container != null) {
+            // Create an instance of the NotepadFragment
+            val notepadFragment = NotepadFragment()
+
+            // Add the fragment to the container
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.notepadContainer, notepadFragment)
+                .commit()
+        }
+
     }
 
     private fun handleNavigationItemSelected(item: MenuItem): Boolean {

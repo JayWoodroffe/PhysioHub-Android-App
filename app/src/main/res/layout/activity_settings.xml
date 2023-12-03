@@ -4,8 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/secondary"
     tools:context=".Settings">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignTop="@id/tvTitle"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_settings"
+        app:tint="@color/mainBlue" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:layout_toRightOf="@id/ivIcon"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="10dp"
+        android:textSize="25sp"
+        android:id="@+id/tvTitle"
+        android:layout_gravity="center"
+        android:textColor="@color/mainBlue"
+        android:textStyle="bold"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/mainBlue"
+        android:layout_above="@id/btmNavMenu"
+        android:text="Logout"
+        android:layout_alignStart="@id/btmNavMenu"
+        android:layout_alignEnd="@id/btmNavMenu"
+        android:layout_marginTop="40dp"
+        android:id="@+id/btnLogout"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btmNavMenu"

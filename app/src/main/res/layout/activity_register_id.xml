@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Provide IDs"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="25dp"
         android:textSize="25sp"
         android:layout_gravity="center"
         android:textColor="@color/mainBlue"
@@ -36,47 +36,49 @@
         android:layout_height="0dp"
         android:layout_weight="0.04"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:text="Certification ID"
-        android:textColor="@color/mainBlue"/>
-
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etC"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:hintEnabled="false">
+        app:boxStrokeColor="@color/mainBlue"
+        app:hintTextColor="@color/mainBlue"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
+        android:layout_below="@id/etE"
+        android:hint="Certificate ID">
 
-        <EditText
+        <!--this is the actual edit text which takes the input-->
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCertID"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            style="@style/CustomEditText"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:text="Practice ID"
-        android:paddingTop="15dp"
-        android:textColor="@color/mainBlue"/>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etP"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:hintEnabled="false">
+        app:boxStrokeColor="@color/mainBlue"
+        app:hintTextColor="@color/mainBlue"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
+        android:layout_below="@id/etE"
+        android:hint="Practice ID">
 
-        <EditText
+        <!--this is the actual edit text which takes the input-->
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPracID"
-            android:layout_width="300dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            style="@style/CustomEditText"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
