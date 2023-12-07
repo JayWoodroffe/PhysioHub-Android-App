@@ -139,7 +139,7 @@
         android:src="@drawable/ic_call"
         app:tint="@color/mainBlue" />-->
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next appointment:"
@@ -160,7 +160,7 @@
         android:layout_alignStart="@id/tvEmailData"
         android:id="@+id/tvNextAppData"/>
 
-    <!--<Button
+ <Button
         android:id="@+id/btnNewAppointment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

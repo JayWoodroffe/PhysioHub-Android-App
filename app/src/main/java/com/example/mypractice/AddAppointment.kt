@@ -130,6 +130,7 @@ class AddAppointment : AppCompatActivity() {
         // Create a TimePickerDialog
         val timePickerDialog = TimePickerDialog(
             this,
+            R.style.TimePickerTheme,
             { _, hourOfDay, minute ->
                 // Update the selectedHour and selectedMinute variables
                 selectedHour = hourOfDay
@@ -201,7 +202,7 @@ class AddAppointment : AppCompatActivity() {
 
     private fun showDiscardConfirmationDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Discard Client")
+        builder.setTitle("Discard Appointment")
             .setMessage("Appointment has not been saved yet. Do you wish to discard this information?")
             .setPositiveButton("Yes") { dialog, which ->
                 // User clicked Yes, navigate to the shopping list activity

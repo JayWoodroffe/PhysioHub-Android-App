@@ -1,17 +1,14 @@
 package com.example.mypractice
 
+//for firebase
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.databinding.ActivityMainBinding
-//for firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.messaging.FirebaseMessaging
 
 
 class Login : AppCompatActivity() {
@@ -55,7 +52,7 @@ class Login : AppCompatActivity() {
                         }
                         else
                         {
-                            Toast.makeText(this@Login, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
                         }
                     }
             }
