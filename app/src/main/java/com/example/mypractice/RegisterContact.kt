@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.mypractice.databinding.ActivityRegisterContactBinding
-import com.example.mypractice.model.DocModel
+import com.example.mypractice.model.DoctorModel
 
 class RegisterContact : AppCompatActivity() {
 
@@ -28,7 +28,7 @@ class RegisterContact : AppCompatActivity() {
             accepted = true
             //sending the name value to the singleton DataRegistration
             try {
-                    DocModel.name = binding.etName.text.toString()
+                    DoctorModel.name = binding.etName.text.toString()
                     binding.etName.setError(null)
                 }
             catch (e: IllegalArgumentException )
@@ -40,7 +40,7 @@ class RegisterContact : AppCompatActivity() {
 
             //sending email address
             try{
-                DocModel.email = binding.etEmail.text.toString()
+                DoctorModel.email = binding.etEmail.text.toString()
                 binding.etEmail.setError(null)
             }
             catch (e: IllegalArgumentException)
@@ -51,7 +51,7 @@ class RegisterContact : AppCompatActivity() {
 
             //sending phone number
             try{
-                DocModel.phone = binding.etNumber.text.toString()
+                DoctorModel.phone = binding.etNumber.text.toString()
                 binding.etNumber.setError(null)
             }
             catch (e: IllegalArgumentException)

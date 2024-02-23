@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.databinding.ActivityRegisterPasswordBinding
-import com.example.mypractice.model.DocModel
+import com.example.mypractice.model.DoctorModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -40,7 +40,7 @@ class RegisterPassword : AppCompatActivity() {
 
             //check if the password matches the requirements
             try {
-                DocModel.password = p1
+                DoctorModel.password = p1
 
                 if (p1 != p2){
                     binding.etPassword2.error = "Passwords don't match"
@@ -63,8 +63,8 @@ class RegisterPassword : AppCompatActivity() {
 
     private fun createUserDb () {
 
-        val email = DocModel.email
-        val password = DocModel.password
+        val email = DoctorModel.email
+        val password = DoctorModel.password
 
         //creates a user in the firebase authentication
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -89,11 +89,11 @@ class RegisterPassword : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         //creating the new user
         val user = hashMapOf(
-            "certId" to DocModel.certID,
-            "email" to DocModel.email,
-            "name" to DocModel.name,
-            "number" to DocModel.phone,
-            "practiceID" to DocModel.pracID,
+            "certId" to DoctorModel.certID,
+            "email" to DoctorModel.email,
+            "name" to DoctorModel.name,
+            "number" to DoctorModel.phone,
+            "practiceID" to DoctorModel.pracID,
         )
 
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.AuthServices
 import com.example.mypractice.databinding.ActivityMainBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -44,17 +45,19 @@ class Login : AppCompatActivity() {
                 Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
             }
             else{
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener{
-                        if (it.isSuccessful)
-                        {
-                            startActivity(Intent(this, Home::class.java))
-                        }
-                        else
-                        {
-                            Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                AuthServices.login(email, password,
+                    onSuccess = {
+                        //login successful
+                        startActivity(Intent(this, Home::class.java))
+                        finish()
+                    },
+                    onFailure = {
+                        Toast.makeText(
+                            this@Login,
+                            "Invalid login details, please try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    })
             }
 
 
