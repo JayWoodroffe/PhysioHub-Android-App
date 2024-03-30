@@ -3,6 +3,7 @@ package com.example.mypractice.data
 import android.util.Log
 import com.example.mypractice.model.ClientModel
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 object  ClientDataAccess {
 
@@ -40,6 +41,31 @@ object  ClientDataAccess {
                 Log.e("ClientDataAccess", "Error adding client", e)
                 // Return null to indicate failure via callback
                 callback(null)
+            }
+    }
+
+    fun addInviteCode(code:String, docID: String)
+    {
+        val inviteReference= FirebaseFirestore.getInstance().collection("invitations")
+
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 3)
+        val expirationTime = calendar.time
+
+
+        val invitationData = hashMapOf(
+            "code" to code,
+            "doctorID" to docID,
+            "expirationTime" to expirationTime
+        )
+
+        inviteReference
+            .add(invitationData)
+            .addOnSuccessListener { documentReference ->
+                Log.d("invitation", "Invitation code stored successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.e("invitation", "Error storing invitation code: ${e.message}")
             }
     }
 }

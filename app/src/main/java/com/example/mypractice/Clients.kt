@@ -52,7 +52,7 @@ class Clients : AppCompatActivity() {
         }
 
         binding.btnAddNew.setOnClickListener {
-            val intent = Intent(this, AddClient::class.java)
+            val intent = Intent(this, InvitationCode::class.java)
             Log.d("Tag", "doc id to send to new act: " + certId)
             intent.putExtra("docId", certId)
             startActivity(intent)
