@@ -3,14 +3,20 @@ package com.example.mypractice
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.example.mypractice.data.DoctorDataAccess
 import com.example.mypractice.databinding.ActivityRegisterContactBinding
-import com.example.mypractice.model.DocModel
+import com.example.mypractice.model.DoctorModel
 
 class RegisterContact : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterContactBinding
-
+    private lateinit var name: String
+    private lateinit var email: String
+    private lateinit var phoneNumber: String
     override fun onCreate(savedInstanceState: Bundle?) {
         var accepted: Boolean
         super.onCreate(savedInstanceState)
@@ -26,46 +32,108 @@ class RegisterContact : AppCompatActivity() {
 
         binding.btnNext.setOnClickListener{
             accepted = true
-            //sending the name value to the singleton DataRegistration
-            try {
-                    DocModel.name = binding.etName.text.toString()
-                    binding.etName.setError(null)
-                }
-            catch (e: IllegalArgumentException )
-            {
-                accepted=false
-                binding.etName.setError("${e.message}")
-            }
+            name = binding.etName.text.toString().trim()
+            email = binding.etEmail.text.toString().trim()
+            phoneNumber = binding.etNumber.text.toString().trim()
+
+            //validating to the name and email address supplied
 
 
-            //sending email address
-            try{
-                DocModel.email = binding.etEmail.text.toString()
-                binding.etEmail.setError(null)
-            }
-            catch (e: IllegalArgumentException)
+            if (validName()&& validEmail()&&validNumber()) //basic data validation
             {
-                accepted=false
-                binding.etEmail.setError("${e.message}")
+                //checks if email is already in the system
+                checkEmailRegistered()//business logic data validation
             }
-
-            //sending phone number
-            try{
-                DocModel.phone = binding.etNumber.text.toString()
-                binding.etNumber.setError(null)
-            }
-            catch (e: IllegalArgumentException)
-            {
-                accepted = false
-                binding.etNumber.setError("${e.message}")
-            }
-            if (accepted == true)
-            {startActivity(Intent(this, RegisterID::class.java))}
         }
 
         //TODO add proper intent for value saving for all back buttons 
         binding.imBack.setOnClickListener{
             onBackPressed()
         }
+    }
+
+    private fun validName():Boolean
+    {
+        val regex = Regex("^[a-zA-Z ]+\$")
+        return if (name == "") {
+            binding.etName.error = "Name cannot be empty"
+            false
+        } else if (!regex.matches(name)) {
+            binding.etName.error = "Name can only contain letters and spaces"
+            false
+        } else {
+            binding.etName.error = null
+            true
+        }
+    }
+
+    private fun validEmail(): Boolean
+    {
+        val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,4})+$")
+        return if (!email.matches(emailRegex)) {
+            binding.etEmail.error = "Invalid Email"
+            false
+        } else {
+            binding.etEmail.error = null
+            true
+        }
+    }
+
+    private fun validNumber(): Boolean
+    {
+        phoneNumber = phoneNumber.replace("\\s+".toRegex(), "")//removing all the spaces in the string
+        var length = phoneNumber.length
+        var alldig = phoneNumber.all{it.isDigit()}
+        return if (alldig&& length == 10) {
+            binding.etNumber.error =null
+            true
+        } else {
+            binding.etNumber.error = "Invalid Number"
+            false
+        }
+    }
+
+    private fun checkEmailRegistered()
+    {
+        DoctorDataAccess.isEmailRegistered(email,
+            onSuccess = { isRegistered ->
+                if (isRegistered) {
+                    //email is already registered as a doctor
+                    showConfirmationDialog()
+                } else {
+                    //email is not registered yet
+                    navigateToNextPage()
+                }
+            },
+            onFailure = {error ->
+                Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
+            })
+    }
+    private fun showConfirmationDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Email Already Registered")
+            .setMessage("This email is already registered as a doctor in our system, would you like to " +
+                    "proceed to login")
+            .setPositiveButton("Yes") { dialog, which ->
+                // User clicked Yes, navigate to the shopping list activity
+                startActivity(Intent(this, Login::class.java))
+            }
+            .setNegativeButton("No") { dialog, which ->
+                // User clicked No, close the dialog (do nothing)
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun navigateToNextPage()
+    {
+        Log.d("RegisterContact", "Name: $name")
+        Log.d("RegisterContact", "Email: $email")
+        Log.d("RegisterContact","Number: $phoneNumber")
+        val intent = Intent(this, RegisterID::class.java)
+        intent.putExtra("Name", name)
+        intent.putExtra("Email", email)
+        intent.putExtra("Number", phoneNumber)
+        startActivity(intent)
     }
 }

@@ -3,10 +3,14 @@ package com.example.mypractice
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.ClientDataAccess
+import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityAddClientBinding
+import com.example.mypractice.model.ClientModel
 import com.example.mypractice.utils.FirebaseUtil
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -22,16 +26,12 @@ class AddClient : AppCompatActivity() {
     private lateinit var name: String
     private lateinit var email: String
     private lateinit var number: String
-    private var docId by Delegates.notNull<Int>()
+    private var docId = DoctorDataHolder.getLoggedInDoctor()?.certId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddClientBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val receivedIntent = intent
-        docId  = receivedIntent.getIntExtra("docId", 0)
-
 
         //hidings status and navigation bar
         window.decorView.systemUiVisibility = (
@@ -62,18 +62,38 @@ class AddClient : AppCompatActivity() {
 
     private fun createUser(){
         //creating the new client
-        val client = hashMapOf(
-            "dob" to dob?.let { com.google.firebase.Timestamp(it) },
-            "doctorID" to docId,
-            "email" to email,
-            "name" to name,
-            "number" to number,
-            "searchField" to name.toLowerCase(),
-            "userType" to "client"
+        val client = ClientModel(
+            email = email,
+            name = name,
+            number = number,
+            doctorID = docId,
+            dob = dob,
+            searchField = name.toLowerCase() // Set searchField based on the name
         )
+        ClientDataAccess.addClient(client){ clientDocumentId ->
+            // Callback function invoked after the client is added successfully
+            clientDocumentId?.let {
+                Log.d("AddClient", "Client added with ID: $clientDocumentId")
+                startActivity(Intent(this, Clients::class.java))
+            } ?: run {
+                Log.e("AddClient", "Failed to add client to Firestore")
+                // Handle failure to add client
+            }
+        }
 
-        FirebaseUtil.addClientToDb(client)
         startActivity(Intent(this, Clients::class.java))
+//        val client = hashMapOf(
+//            "dob" to dob?.let { com.google.firebase.Timestamp(it) },
+//            "doctorID" to docId,
+//            "email" to email,
+//            "name" to name,
+//            "number" to number,
+//            "searchField" to name.toLowerCase(),
+//            "userType" to "client"
+//        )
+//
+//        FirebaseUtil.addClientToDb(client)
+//        startActivity(Intent(this, Clients::class.java))
     }
     private fun verifyInputs(): Boolean{
         var validData = true

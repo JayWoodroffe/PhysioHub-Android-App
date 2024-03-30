@@ -9,8 +9,9 @@ data class ClientModel (
     var email: String,
     var name: String,
     var number: String?,
-    var docID: Int?,
-    var dob: Date?
+    var doctorID: String?,
+    var dob: Date?,
+    var searchField: String?
 ) {
-    constructor() : this("", "", "", "", null, null) {}
+    constructor() : this("", "", "", "", "", null, "") {}
 }

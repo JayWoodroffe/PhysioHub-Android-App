@@ -3,9 +3,11 @@ package com.example.mypractice
 //for firebase
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.AuthServices
 import com.example.mypractice.databinding.ActivityMainBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -44,17 +46,31 @@ class Login : AppCompatActivity() {
                 Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
             }
             else{
-                firebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener{
-                        if (it.isSuccessful)
-                        {
+                try {
+
+                    AuthServices.login(email, password,
+                        onSuccess = {
+                            //login successful
                             startActivity(Intent(this, Home::class.java))
-                        }
-                        else
-                        {
-                            Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                            finish()
+                        },
+                        onFailure = {
+                            Toast.makeText(
+                                this@Login,
+                                "Invalid login details, please try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e("LoginActivity", "Login failed")
+                        })
+                }catch (e: Exception) {
+                    // Handle any unexpected exceptions
+                    Toast.makeText(
+                        this@Login,
+                        "An unexpected error occurred, please try again later",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("LoginActivity", "Unexpected error during login", e)
+                }
             }
 
 

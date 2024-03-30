@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.AppointmentsDataAccess
+import com.example.mypractice.data.DoctorDataAccess
+import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityAddAppointmentBinding
 import com.example.mypractice.utils.FirebaseUtil
 import com.google.firebase.Timestamp
@@ -40,32 +43,46 @@ class AddAppointment : AppCompatActivity() {
 
         }
 
-        FirebaseUtil.getDoctorCertIdByEmail{certId ->
-            if (certId != null) {
-                docId = certId.toInt()
-                Log.d ("Tag" , "doc id received by new appt activity; " + certId)
-                val query = FirebaseUtil.getAllClientsForDoctorQuery(certId)
-                query.get().addOnSuccessListener { documents ->
-                    val clientNames = mutableListOf<String>()
-
-                    for (document in documents)
-                    {
-                        Log.d ("Tag" , "in for loop")
-                        val clientName = document.getString("name")
-                        clientName?.let{
-                            clientNames.add(it)
-                        }
-                    }
-                    Log.d ("Tag" , "number of clients " + clientNames.size)
-                    //set up the spinner w client names
-                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, clientNames)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    binding.spinClients.adapter = adapter
-                }.addOnFailureListener{exception ->
-                    Log.e("tag", "Error getting clients " + exception)
-                }
+        //setting up the client list for this doctor
+        DoctorDataAccess.getClientsForDoctor { clientNames ->
+            //if list is not null, populate the spinner
+            clientNames?.let{
+                Log.d("Tag", "number of clients: $it.size")
+                // Set up the spinner with client names
+                val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, it)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.spinClients.adapter = adapter
+            } ?: run {
+                // Handle the case where clientNames is null (e.g., display an error message)
+                Log.e("Tag", "Error getting client names")
             }
         }
+//        FirebaseUtil.getDoctorCertIdByEmail{certId ->
+//            if (certId != null) {
+//                docId = certId.toInt()
+//                Log.d ("Tag" , "doc id received by new appt activity; " + certId)
+//                val query = FirebaseUtil.getAllClientsForDoctorQuery(certId)
+//                query.get().addOnSuccessListener { documents ->
+//                    val clientNames = mutableListOf<String>()
+//
+//                    for (document in documents)
+//                    {
+//                        Log.d ("Tag" , "in for loop")
+//                        val clientName = document.getString("name")
+//                        clientName?.let{
+//                            clientNames.add(it)
+//                        }
+//                    }
+//                    Log.d ("Tag" , "number of clients " + clientNames.size)
+//                    //set up the spinner w client names
+//                    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, clientNames)
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                    binding.spinClients.adapter = adapter
+//                }.addOnFailureListener{exception ->
+//                    Log.e("tag", "Error getting clients " + exception)
+//                }
+//            }
+//        }
 
         //hidings status and navigation bar
         window.decorView.systemUiVisibility = (
@@ -90,8 +107,17 @@ class AddAppointment : AppCompatActivity() {
             if (validateData()) {
                 val selectedClient: String = binding.spinClients.selectedItem as String
                 val timestamp: Timestamp = getCombinedDateTime()
-                docId?.let { it1 -> FirebaseUtil.addAppointment(selectedClient, it1, timestamp) }
-                startActivity(Intent(this, Appointments::class.java))
+                AppointmentsDataAccess.addAppointment(selectedClient, timestamp ){success ->
+                    if (success){
+                        startActivity(Intent(this, Appointments::class.java))
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Failed to add appointment", Toast.LENGTH_SHORT).show()
+                    }
+                }
+//                docId?.let { it1 -> FirebaseUtil.addAppointment(selectedClient, it1, timestamp) }
+
             }
             else
             {

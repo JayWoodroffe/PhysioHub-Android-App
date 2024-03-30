@@ -24,7 +24,6 @@ object AuthServices {
                             onSuccess()
                         },
                         onFailure = { error ->
-                            Log.e("LoginActvity", error)
                             onFailure(error)
                         }
                     )

@@ -2,11 +2,16 @@ package com.example.mypractice
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.AppointmentsDataAccess
+import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityHomeBinding
 import com.example.mypractice.model.Appointment
+import com.example.mypractice.model.DoctorModel
 import com.example.mypractice.utils.FirebaseUtil
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
@@ -19,12 +24,13 @@ import java.util.Locale
 class Home : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
-
+    private var loggedInDoctor: DoctorModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d("Home", "arrived in home")
 
         //hidings status and navigation bar
         window.decorView.systemUiVisibility = (
@@ -36,14 +42,29 @@ class Home : AppCompatActivity() {
 
         //setting the greeting
         binding.tvGreeting.setText(getGreeting())
-        FirebaseUtil.getDoctorNameByEmail { name ->
-            binding.tvName.setText("Dr. " + name)
+
+        loggedInDoctor = DoctorDataHolder.getLoggedInDoctor()
+        if(loggedInDoctor!=null)
+        {
+            binding.tvName.setText("Dr. " + loggedInDoctor!!.name)
+            //setting up the appt display
+            loggedInDoctor!!.certId?.let {
+                AppointmentsDataAccess.getNextAppointment(it){ appointment ->
+                    if(appointment!= null){
+                        updateUIWithAppointment(appointment)
+                    } else{
+                        showNoAppointmentsMessage()
+                    }
+                }
+            }
+        }
+        else {
+            Toast.makeText(this, "No doctor logged in", Toast.LENGTH_SHORT).show()
         }
         binding.gif.setImageResource(getGif())
 
 
-        //setting up the appt display
-        getAppt()
+
 
 
         //changing the activity when menu item is selected
@@ -67,6 +88,16 @@ class Home : AppCompatActivity() {
 
     }
 
+    private fun updateUIWithAppointment(appointment: Appointment) {
+        binding.tvClientName.text =appointment.clientName
+        binding.tvTime.text = SimpleDateFormat("dd MMM h:mm a", Locale.getDefault()).format(appointment.time)
+    }
+
+    private fun showNoAppointmentsMessage() {
+        // Display a message indicating no appointments found
+        binding.tvClientName.text = "No future appointments created"
+        binding.tvTime.text = ""
+    }
     private fun handleNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.nav_home ->{
@@ -109,51 +140,5 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun getAppt()
-    {
-        val currentTimeStamp: Timestamp = Timestamp.now()
-        var nextAppointment: Appointment
 
-// Querying the doctor's appointments for the selected day using their certId
-        var certId = FirebaseUtil.getDoctorCertIdByEmail { certId ->
-            val appointmentsCollectionRef = FirebaseUtil.allAppointmentsCollectionReference()
-
-            val query = appointmentsCollectionRef
-                .whereEqualTo("doctorCertId", certId)
-                .whereGreaterThanOrEqualTo("date", currentTimeStamp)
-                .orderBy("date", Query.Direction.ASCENDING)
-                .limit(1) // Limit the result to the first document
-
-            // Execute the query
-            query.get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        // Parse and process the first appointment document
-                        val time = document.getTimestamp("date")?.toDate()
-                        val clientName = document.getString("clientName")
-
-                        // Create Appointment object and assign it to nextAppointment
-                        nextAppointment = Appointment(clientName ?: "", time ?: Date())
-
-
-                        binding.tvClientName.text = nextAppointment.clientName
-                        binding.tvTime.text = SimpleDateFormat("dd MMM h:mm a", Locale.getDefault()).format(nextAppointment.time)
-                        // using a break to get out of the loop since i only need the first appointment
-                        break
-                    }
-                    if (documents.size() == 0)
-                    {
-                        //display that there are no upcoming appts
-                        binding.tvClientName.text = "No future appointments created"
-                        binding.tvTime.text = ""
-                    }
-                    //Log.d("appointments", "Number of appointments after query: " + appointmentsList.size)
-                }
-                .addOnFailureListener { exception ->
-                    //Log.e("Appointments", "Failed to query appointments", exception)
-                    //(emptyList()) // Notify the callback with an empty list in case of failure
-
-                }
-        }
-    }
 }

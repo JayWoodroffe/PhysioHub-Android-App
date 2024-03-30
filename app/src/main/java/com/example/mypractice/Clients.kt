@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypractice.adapter.SearchClientRecyclerAdapter
+import com.example.mypractice.data.DoctorDataAccess
+import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityClientsBinding
 import com.example.mypractice.model.ClientModel
 import com.example.mypractice.utils.FirebaseUtil
@@ -20,7 +22,7 @@ class Clients : AppCompatActivity() {
     private lateinit var  adapter: SearchClientRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private var query: Query? = null
-    private var certId: Int? = null
+    private var certId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientsBinding.inflate(layoutInflater)
@@ -58,12 +60,14 @@ class Clients : AppCompatActivity() {
 
     }
     private fun setupDoctorCertId(callback: () -> Unit) {
-        FirebaseUtil.getDoctorCertIdByEmail { obtainedCertId ->
-            if (obtainedCertId != null) {
-                certId = obtainedCertId.toInt()
-            }
-            callback.invoke() // Call the callback once the certId is obtained
-        }
+        DoctorDataHolder.getLoggedInDoctor()?.certId
+        callback.invoke()
+//        FirebaseUtil.getDoctorCertIdByEmail { obtainedCertId ->
+//            if (obtainedCertId != null) {
+//                certId = obtainedCertId.toInt()
+//            }
+//            callback.invoke() // Call the callback once the certId is obtained
+//        }
     }
 
 
@@ -89,30 +93,49 @@ class Clients : AppCompatActivity() {
     private fun setupSearchRecyclerView(searchTerm: String) {
         //adds the clients to the recycler view
         Log.d("filter", "docId: $certId")
-
-        val query = FirebaseUtil.getClientQuery(certId, searchTerm)
-
-        val options = FirestoreRecyclerOptions.Builder<ClientModel>()
-            .setQuery(query, ClientModel::class.java)
-            .build()
-
-        adapter = SearchClientRecyclerAdapter(options, applicationContext)
-        binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.clientRecyclerView.adapter = adapter
-
-        // Set onItemClick listener
-        adapter.onItemClick = { position, clientId ->
-            val selectedClientModel = adapter.getItem(position)
-
-            //  pass the selected client information to the ClientDetails activity
-            val intent = Intent(this, ClientDetails::class.java).apply {
-                putExtra("clientId", clientId)
-                // Add other details as needed
+        val docCertId = DoctorDataHolder.getLoggedInDoctor()?.certId
+        if (docCertId != null) {
+            val query = DoctorDataAccess.getClientQuery(docCertId, searchTerm)
+            Log.d("ClientsActivity", "Query: $query")
+            val options = FirestoreRecyclerOptions.Builder<ClientModel>()
+                .setQuery(query, ClientModel::class.java)
+                .build()
+            adapter = SearchClientRecyclerAdapter(options, applicationContext)
+            binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
+            binding.clientRecyclerView.adapter = adapter
+            adapter.onItemClick = { position, clientId ->
+                val selectedClientModel = adapter.getItem(position)
+                val intent = Intent(this, ClientDetails::class.java).apply {
+                    putExtra("clientId", clientId)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
+            adapter.startListening()
         }
 
-        adapter.startListening()
+//        val query = FirebaseUtil.getClientQuery(certId, searchTerm)
+//
+//        val options = FirestoreRecyclerOptions.Builder<ClientModel>()
+//            .setQuery(query, ClientModel::class.java)
+//            .build()
+//
+//        adapter = SearchClientRecyclerAdapter(options, applicationContext)
+//        binding.clientRecyclerView.layoutManager = LinearLayoutManager(this)
+//        binding.clientRecyclerView.adapter = adapter
+//
+//        // Set onItemClick listener
+//        adapter.onItemClick = { position, clientId ->
+//            val selectedClientModel = adapter.getItem(position)
+//
+//            //  pass the selected client information to the ClientDetails activity
+//            val intent = Intent(this, ClientDetails::class.java).apply {
+//                putExtra("clientId", clientId)
+//                // Add other details as needed
+//            }
+//            startActivity(intent)
+//        }
+//
+//        adapter.startListening()
     }
 
     override fun onStart() {

@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.mypractice.data.AppointmentsDataAccess
 import com.example.mypractice.databinding.ActivityAppointmentsBinding
 import com.example.mypractice.model.Appointment
 import com.example.mypractice.utils.FirebaseUtil
@@ -59,6 +60,14 @@ class Appointments : AppCompatActivity() {
         navigationView.selectedItemId = R.id.nav_appointments
         navigationView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
 
+
+        setUpDateScrollView()
+
+
+    }
+
+    private fun setUpDateScrollView()
+    {
         //setting up the horizontal scroll view of dates
         val inflater = LayoutInflater.from(this)
         val scrollView: HorizontalScrollView = binding.horScroll
@@ -116,9 +125,9 @@ class Appointments : AppCompatActivity() {
             }
 
             linearLayout.addView(dateSquare)
+
+
         }
-
-
         // Set the initial selected date to the current date
         val initialSelectedDate = Calendar.getInstance()
         initialSelectedDate.set(Calendar.HOUR_OF_DAY, 0)
@@ -145,43 +154,6 @@ class Appointments : AppCompatActivity() {
         }
     }
 
-    private fun getAppointments(currentDay: Timestamp, nextDay: Timestamp, callback: (List<Appointment>) -> Unit) {
-
-        val appointmentsList = mutableListOf<Appointment>()
-        //querying the doctors appointments for the selected day using their certId
-        var certId = FirebaseUtil.getDoctorCertIdByEmail { certId ->
-            val appointmentsCollectionRef = FirebaseUtil.allAppointmentsCollectionReference()
-
-            val query = appointmentsCollectionRef
-                .whereEqualTo("doctorCertId", certId)
-                .whereGreaterThanOrEqualTo("date", currentDay)
-                .whereLessThan("date", nextDay)
-                .orderBy("date", Query.Direction.ASCENDING)
-
-//            Log.d("Appointments", "time " + day.timeInMillis + TimeUnit.DAYS.toMillis(1))
-            // Execute the query
-            query.get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        // Parse and process each appointment document
-                        val time = document.getTimestamp("date")?.toDate()
-                        val clientName = document.getString("clientName")
-
-                        // Create Appointment object and add it to the list
-                        val appointment = Appointment(clientName ?: "", time ?: Date())
-                        appointmentsList.add(appointment)
-                    }
-                    Log.d("appointments", "number of appointments after query: " + appointmentsList.size)
-                    callback(appointmentsList) // Notify the callback with the result
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("Appointments", "Failed to query appointments", exception)
-                    callback(emptyList()) // Notify the callback with an empty list in case of failure
-                }
-
-        }
-    }
-
     private fun formatTimestamp(timestamp: Timestamp): String {
         // Create a SimpleDateFormat instance with the desired format
         val sdf = SimpleDateFormat("dd MMM yyyy hh:mm a", Locale.getDefault())
@@ -190,74 +162,7 @@ class Appointments : AppCompatActivity() {
         val date = timestamp.toDate()
         return sdf.format(date)
     }
-    private fun displayAppointments(dayStart:Timestamp, dayEnd:Timestamp)
-    {
-        val formattedTimestamp1 = formatTimestamp(dayStart)
-        val formattedTimestamp2 = formatTimestamp(dayEnd)
-        Log.d("appt", "Timestamp 1: $formattedTimestamp1")
-        Log.d("appt", "Timestamp 2: $formattedTimestamp2")
-        //setting up appointments for current day
-        getAppointments(dayStart, dayEnd) { appointmentsList ->
-
-
-            // Handle the result here
-            Log.d("appointments", "number of appointments received: " + appointmentsList.size)
-            val appointmentsLayout: LinearLayout = binding.appointmentsLayout
-
-            for (appointment in appointmentsList)
-            {
-                val appointmentItem = LayoutInflater.from(this).inflate(R.layout.item_appt, null) as LinearLayout
-                // Assuming itemAppt is the layout you want to space vertically
-                val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                params.setMargins(0, 0, 0, 20)  // Adjust the vertical margin as needed
-                appointmentItem.layoutParams = params
-
-                //setting up appointment details
-                val timeTv: TextView = appointmentItem.findViewById(R.id.tvTime)
-                val clientNameTv: TextView = appointmentItem.findViewById(R.id.tvClientName)
-
-                timeTv.text = SimpleDateFormat("h:mm a", Locale.getDefault()).format(appointment.time)
-                clientNameTv.text = appointment.clientName
-
-                //add the app to linear layout
-                appointmentsLayout.addView(appointmentItem)
-                Log.d("Appt check", "appt added")
-            }
-        }
-    }
-    private fun getTodayTimestamp(): Timestamp {
-        val currentDate = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        return Timestamp(currentDate.time)
-    }
-
-    private fun getTomorrowTimestamp(): Timestamp {
-        val tomorrowDate = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_MONTH, 1)
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        return Timestamp(tomorrowDate.time)
-    }
-
-    // Function to update appointments based on the selected date
-    private fun updateAppointmentsForDate(selectedDate: Calendar) {
-
-        val currentDate = Calendar.getInstance()
-        if (selectedDate.get(Calendar.MONTH) < currentDate.get(Calendar.MONTH)) {
-            // Increment the year for the next year
-            selectedDate.add(Calendar.YEAR, 1)
-        }
-
-        // Clear the existing appointments layout
+    private fun updateAppointmentsForDate(selectedDate:Calendar) {
         binding.appointmentsLayout.removeAllViews()
 
         //setting the date view
@@ -265,10 +170,80 @@ class Appointments : AppCompatActivity() {
         binding.tvDate.text = dateFormat.format(selectedDate.time)
         binding.tvDayofWeek.text = SimpleDateFormat("EEEE", Locale.getDefault()).format(selectedDate.time)
 
-
-        //display appointments for the newly selected date
-        displayAppointments(Timestamp(selectedDate.time), Timestamp(dayPlusOne(selectedDate).time))
+        //setting up appointments for current day
+        AppointmentsDataAccess.getAppointments(Timestamp(selectedDate.time), Timestamp(dayPlusOne(selectedDate).time)) { appointmentsList ->
+            displayAppointments(appointmentsList)
+        }
     }
+
+    private fun displayAppointments(appointmentsList: List<Appointment>)
+    {
+        val appointmentsLayout : LinearLayout= binding.appointmentsLayout
+        for (appointment in appointmentsList)
+        {
+            val appointmentItem = LayoutInflater.from(this).inflate(R.layout.item_appt, null) as LinearLayout
+            // Assuming itemAppt is the layout you want to space vertically
+            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            params.setMargins(0, 0, 0, 20)  // Adjust the vertical margin as needed
+            appointmentItem.layoutParams = params
+
+            //setting up appointment details
+            val timeTv: TextView = appointmentItem.findViewById(R.id.tvTime)
+            val clientNameTv: TextView = appointmentItem.findViewById(R.id.tvClientName)
+
+            timeTv.text = SimpleDateFormat("h:mm a", Locale.getDefault()).format(appointment.time)
+            clientNameTv.text = appointment.clientName
+
+            //add the app to linear layout
+            appointmentsLayout.addView(appointmentItem)
+            Log.d("Appt check", "appt added")
+        }
+
+    }
+//    private fun getTodayTimestamp(): Timestamp {
+//        val currentDate = Calendar.getInstance().apply {
+//            set(Calendar.HOUR_OF_DAY, 0)
+//            set(Calendar.MINUTE, 0)
+//            set(Calendar.SECOND, 0)
+//            set(Calendar.MILLISECOND, 0)
+//        }
+//
+//        return Timestamp(currentDate.time)
+//    }
+//
+//    private fun getTomorrowTimestamp(): Timestamp {
+//        val tomorrowDate = Calendar.getInstance().apply {
+//            add(Calendar.DAY_OF_MONTH, 1)
+//            set(Calendar.HOUR_OF_DAY, 0)
+//            set(Calendar.MINUTE, 0)
+//            set(Calendar.SECOND, 0)
+//            set(Calendar.MILLISECOND, 0)
+//        }
+//
+//        return Timestamp(tomorrowDate.time)
+//    }
+
+//    // Function to update appointments based on the selected date
+//    private fun updateAppointmentsForDate(selectedDate: Calendar) {
+//
+//        val currentDate = Calendar.getInstance()
+//        if (selectedDate.get(Calendar.MONTH) < currentDate.get(Calendar.MONTH)) {
+//            // Increment the year for the next year
+//            selectedDate.add(Calendar.YEAR, 1)
+//        }
+//
+//        // Clear the existing appointments layout
+//        binding.appointmentsLayout.removeAllViews()
+//
+//        //setting the date view
+//        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+//        binding.tvDate.text = dateFormat.format(selectedDate.time)
+//        binding.tvDayofWeek.text = SimpleDateFormat("EEEE", Locale.getDefault()).format(selectedDate.time)
+//
+//
+//        //display appointments for the newly selected date
+//        displayAppointments(Timestamp(selectedDate.time), Timestamp(dayPlusOne(selectedDate).time))
+//    }
 
 
     private fun dayPlusOne(day: Calendar): Calendar { //get to calendar object of the day after a calendar object

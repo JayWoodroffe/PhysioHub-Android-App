@@ -7,8 +7,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.ClientDataAccess
 import com.example.mypractice.databinding.ActivityClientDetailsBinding
-import com.example.mypractice.utils.FirebaseUtil
+import com.example.mypractice.model.ClientModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -42,42 +43,69 @@ class ClientDetails : AppCompatActivity() {
         Log.d("ClientDetails", "Client ID: $clientId")
 
         //querying the rest of the information about the client
-        FirebaseUtil.firestore.collection("users").document(clientId!!)
-            .get()
-            .addOnSuccessListener { document ->
-                // Check if the document exists
-                if (document != null && document.exists()) {
-                    val name = document.getString("name")
-                    number = document.getString("number").toString()
-                    val email = document.getString("email")
-                    val dobTS = document.getTimestamp("dob")
-                    val dob: Date? = dobTS?.toDate()
+        ClientDataAccess.getClientByID(clientId!!) { client: ClientModel? ->
+            client?.let{
+                val name = it.name
+                val number = it.number?:""
+                val email = it.email?:""
+                val dob = it.dob
 
-                    // Check if dob is not null before formatting
-                    dob?.let {
-                        val formattedDate =
-                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
-
-                        // Check if tvDobData is not null before setting the text
-                        val age = dob.calculateAge()
-                        binding.tvDobData?.text = formattedDate
-                        binding.tvAgeData?.text = age.toString()
-                    } ?: run {
-                        // Handle the case when dob is null
-                        binding.tvDobData?.text = "N/A"
-                    }
-
-                    // Update the UI with client information
-                    binding.tvClientName?.text = name
-                    binding.tvNumberData?.text = number
-                    binding.tvEmailData?.text = email
-                } else {
-                    Log.d("ClientDetails", "Document with ID $clientId does not exist.")
+                dob?.let{
+                    val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                    val age = it.calculateAge()
+                    binding.tvDobData?.text = formattedDate
+                    binding.tvAgeData?.text = age.toString()
+                }?:run{
+                    binding.tvDobData.text = "N/A"
                 }
+
+                binding.tvClientName?.text = name
+                binding.tvNumberData?.text = number
+                binding.tvEmailData?.text = email
+            } ?: run {
+                Log.d("ClientDetails", "No client found with ID: $clientId")
             }
-            .addOnFailureListener { exception ->
-                binding.tvClientName.text = "not found"
-            }
+
+        }
+
+
+
+//        FirebaseUtil.firestore.collection("users").document(clientId!!)
+//            .get()
+//            .addOnSuccessListener { document ->
+//                // Check if the document exists
+//                if (document != null && document.exists()) {
+//                    val name = document.getString("name")
+//                    number = document.getString("number").toString()
+//                    val email = document.getString("email")
+//                    val dobTS = document.getTimestamp("dob")
+//                    val dob: Date? = dobTS?.toDate()
+//
+//                    // Check if dob is not null before formatting
+//                    dob?.let {
+//                        val formattedDate =
+//                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+//
+//                        // Check if tvDobData is not null before setting the text
+//                        val age = dob.calculateAge()
+//                        binding.tvDobData?.text = formattedDate
+//                        binding.tvAgeData?.text = age.toString()
+//                    } ?: run {
+//                        // Handle the case when dob is null
+//                        binding.tvDobData?.text = "N/A"
+//                    }
+//
+//                    // Update the UI with client information
+//                    binding.tvClientName?.text = name
+//                    binding.tvNumberData?.text = number
+//                    binding.tvEmailData?.text = email
+//                } else {
+//                    Log.d("ClientDetails", "Document with ID $clientId does not exist.")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                binding.tvClientName.text = "not found"
+//            }
 
         //call button
         binding.tvNumberData.setOnClickListener {

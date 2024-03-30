@@ -6,8 +6,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mypractice.data.DoctorDataAccess
 import com.example.mypractice.databinding.ActivityRegisterPasswordBinding
-import com.example.mypractice.model.DocModel
+import com.example.mypractice.model.DoctorModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -39,103 +40,61 @@ class RegisterPassword : AppCompatActivity() {
             var p2 = binding.etPassword2.text.toString()
 
             //check if the password matches the requirements
-            try {
-                DocModel.password = p1
-
-                if (p1 != p2){
-                    binding.etPassword2.error = "Passwords don't match"
-                }
-                else{ //all the data given has been verified - now create the user in the firebase db
-
-                    createUserDb()
-                }
-            }
-            catch (e: IllegalArgumentException)
+            if(validPassword(p1) && passwordMatch(p1, p2))
             {
-                binding.etPassword1.error = "${e.message}"
+                addDoctorToDatabase(p1)
+                startActivity(Intent(this, Login::class.java))
             }
-
-
         }
-
-
     }
 
-    private fun createUserDb () {
+    private fun addDoctorToDatabase(pw:String)
+    {
+        val name = intent.getStringExtra("Name")
+        val email = intent.getStringExtra("Email")
+        val number = intent.getStringExtra("Number")
+        val certID = intent.getStringExtra("CertID")
+        val pracID = intent.getStringExtra("PracID")
+        val newDoctor = DoctorModel(name, email, number, certID, pracID)
+        DoctorDataAccess.addNewDoctor(newDoctor, pw)
+    }
+    private fun validPassword(pw: String): Boolean
+    {
+        val specialCharRegex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]")
+         val digitRegex = Regex("\\d")
 
-        val email = DocModel.email
-        val password = DocModel.password
-
-        //creates a user in the firebase authentication
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    addDocToFirestore()
-
-                }
-                //TODO add proper on fail popup
-                else {
-                    Toast.makeText(
-                        this@RegisterPassword,
-                        it.exception.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+         //checking if the password matches the requirements for a safe password
+         var valid: Boolean = true
+         if( pw.length < 8 )
+         {
+             binding.etPassword1.error = "Password too short. Must be 8 characters or more."
+             valid = false
+         }
+         if (!specialCharRegex.containsMatchIn(pw))
+         {
+             binding.etPassword1.error = "Password should contain a special character"
+             valid = false
+         }
+         if(!digitRegex.containsMatchIn(pw)) {
+             binding.etPassword1.error = "Password should contain a digit"
+             valid = false
+         }
+        if(valid)
+        {
+            binding.etPassword1.error= null
+        }
+         return valid
     }
 
-    private fun addDocToFirestore() {
-        //add user to the firestore
-        val db = FirebaseFirestore.getInstance()
-        //creating the new user
-        val user = hashMapOf(
-            "certId" to DocModel.certID,
-            "email" to DocModel.email,
-            "name" to DocModel.name,
-            "number" to DocModel.phone,
-            "practiceID" to DocModel.pracID,
-        )
-
-
-        //adding the new document with a generated ID
-        db.collection("doctors")
-            .add(user)
-            .addOnSuccessListener { documentReference ->
-                Log.d("Tag", "DocumentSnapshot added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w("Tag", "Error adding document", e)
-            }
-
-        //checking if the data is added
-//        db.collection("doctors")
-//            .get()
-//            .addOnSuccessListener { documents ->
-//                for (document in documents) {
-//                    val userData = document.data
-//                    val username = userData["name"] as String
-//                    val email = userData["email"] as String
-////                    Toast.makeText(
-////                        this@RegisterPassword,
-////                        "welcome " + username + "!",
-////                        Toast.LENGTH_SHORT
-////                    ).show()
-////                }
-//
-//            }
-//            .addOnFailureListener { exception ->
-//                runOnUiThread {
-//                    Toast.makeText(
-//                        this@RegisterPassword,
-//                        "didnt add right",
-//                        Toast.LENGTH_SHORT
-//                        //TODO handle error event correctly
-//                    ).show()
-//                }
-//            }
-        val intent = Intent(this, Login::class.java)
-        startActivity(intent)
-
+    private fun passwordMatch(pw1: String, pw2: String): Boolean
+    {
+        return if (pw1!= pw2) {
+            binding.etPassword2.error = "Passwords do not match"
+            false
+        } else{
+            binding.etPassword2.error = null
+            true
+        }
     }
 
 }
