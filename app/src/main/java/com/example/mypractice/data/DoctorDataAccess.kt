@@ -99,6 +99,21 @@ object DoctorDataAccess {
             }
     }
 
+    fun addDoctorToFirestore(newDoctor: DoctorModel)
+    {
+        val firestore = FirebaseFirestore.getInstance()
+
+        // Add the doctor's data to Firestore
+        firestore.collection("doctors")
+            .add(newDoctor)
+            .addOnSuccessListener { documentReference ->
+                Log.d("Tag", "Doctor document added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Tag", "Error adding doctor document", e)
+            }
+    }
+
     fun getClientsForDoctor(callback: (List<String>?) -> Unit)
     {
         val clientList = mutableListOf<String>()

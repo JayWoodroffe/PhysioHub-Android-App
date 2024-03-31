@@ -95,8 +95,8 @@ class Home : AppCompatActivity() {
 
     private fun showNoAppointmentsMessage() {
         // Display a message indicating no appointments found
-        binding.tvClientName.text = "No future appointments created"
-        binding.tvTime.text = ""
+        binding.tvClientName.text = ""
+        binding.tvTime.text = "No future appointments created"
     }
     private fun handleNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId){

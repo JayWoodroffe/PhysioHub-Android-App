@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.mypractice.data.DoctorDataAccess
+import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityRegisterIdBinding
 import com.example.mypractice.model.DoctorModel
 
@@ -35,7 +36,7 @@ class RegisterID : AppCompatActivity() {
          email = receivedIntent.getStringExtra("Email").toString()
          number= receivedIntent.getStringExtra("Number").toString()
 
-        binding.btnNext.setOnClickListener {
+        binding.btnFinish.setOnClickListener {
             var certID = binding.etCertID.text.toString().trim()
             var pracID = binding.etPracID.text.toString().trim()
 
@@ -72,7 +73,7 @@ class RegisterID : AppCompatActivity() {
                 if (isRegistered)
                     showConfirmationDialog()
                 else
-                    navigateToNextPage(certID, pracID)
+                    finish(certID, pracID)
             },
             onFailure = {error ->
                 Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
@@ -95,22 +96,34 @@ class RegisterID : AppCompatActivity() {
             .show()
     }
 
-    private fun navigateToNextPage(certID: String, pracID: String)
+    private fun finish(certID: String, pracID: String)
     {
-        val intent = Intent(this, RegisterPassword::class.java)
+        addDoctorToDatabase(certID, pracID)
+        startActivity(Intent(this, Home::class.java))
+//        val intent = Intent(this, RegisterPassword::class.java)
+//
+//        //adding intents to next screen
+//        intent.putExtra("Name", name)
+//        intent.putExtra("Email", email)
+//        intent.putExtra("Number", number)
+//
+//        Log.d("RegisterID", "Received Name: $name")
+//        Log.d("RegisterID", "Received Email: $email")
+//        Log.d("RegisterID", "Received Number: $number")
+//        //intents from this screen
+//        intent.putExtra("CertID", certID)
+//        intent.putExtra("PracID", pracID)
+//
+//        startActivity(intent)
+    }
 
-        //adding intents to next screen
-        intent.putExtra("Name", name)
-        intent.putExtra("Email", email)
-        intent.putExtra("Number", number)
-
-        Log.d("RegisterID", "Received Name: $name")
-        Log.d("RegisterID", "Received Email: $email")
-        Log.d("RegisterID", "Received Number: $number")
-        //intents from this screen
-        intent.putExtra("CertID", certID)
-        intent.putExtra("PracID", pracID)
-
-        startActivity(intent)
+    private fun addDoctorToDatabase(certID: String, pracID: String)
+    {
+        val name = intent.getStringExtra("Name")
+        val email = intent.getStringExtra("Email")
+        val number = intent.getStringExtra("Number")
+        val newDoctor = DoctorModel(name, email, number, certID, pracID)
+        DoctorDataAccess.addDoctorToFirestore(newDoctor)
+        DoctorDataHolder.setLoggedInDoctor(newDoctor)
     }
 }

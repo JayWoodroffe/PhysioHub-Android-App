@@ -30,16 +30,18 @@ class RegisterContact : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 )
 
+        val receivedIntent = intent
+        email = receivedIntent.getStringExtra("Email").toString()
+
         binding.btnNext.setOnClickListener{
             accepted = true
             name = binding.etName.text.toString().trim()
-            email = binding.etEmail.text.toString().trim()
             phoneNumber = binding.etNumber.text.toString().trim()
 
             //validating to the name and email address supplied
 
 
-            if (validName()&& validEmail()&&validNumber()) //basic data validation
+            if (validName()&&validNumber()) //basic data validation
             {
                 //checks if email is already in the system
                 checkEmailRegistered()//business logic data validation
@@ -67,17 +69,7 @@ class RegisterContact : AppCompatActivity() {
         }
     }
 
-    private fun validEmail(): Boolean
-    {
-        val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,4})+$")
-        return if (!email.matches(emailRegex)) {
-            binding.etEmail.error = "Invalid Email"
-            false
-        } else {
-            binding.etEmail.error = null
-            true
-        }
-    }
+
 
     private fun validNumber(): Boolean
     {
@@ -130,6 +122,9 @@ class RegisterContact : AppCompatActivity() {
         Log.d("RegisterContact", "Name: $name")
         Log.d("RegisterContact", "Email: $email")
         Log.d("RegisterContact","Number: $phoneNumber")
+
+
+
         val intent = Intent(this, RegisterID::class.java)
         intent.putExtra("Name", name)
         intent.putExtra("Email", email)

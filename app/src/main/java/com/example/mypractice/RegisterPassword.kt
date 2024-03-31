@@ -56,7 +56,7 @@ class RegisterPassword : AppCompatActivity() {
         val certID = intent.getStringExtra("CertID")
         val pracID = intent.getStringExtra("PracID")
         val newDoctor = DoctorModel(name, email, number, certID, pracID)
-        DoctorDataAccess.addNewDoctor(newDoctor, pw)
+        //DoctorDataAccess.addNewDoctor(newDoctor, pw)
     }
     private fun validPassword(pw: String): Boolean
     {
