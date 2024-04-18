@@ -13,59 +13,86 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
         android:text="Invitation Link"
+        android:fontFamily="sans-serif"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="30dp"
         android:id="@+id/tvHeader"
         android:background="@drawable/round_bar_blue"/>
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_below="@+id/tvHeader"
-        app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="#F2F2F2"
-        app:cardElevation="4dp">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cardView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/tvHeader"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        app:cardBackgroundColor="#F2F2F2"-->
+<!--        app:cardCornerRadius="8dp"-->
+<!--        app:cardElevation="4dp">-->
 
-        <RelativeLayout
+        <!--        <RelativeLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:padding="16dp"-->
+        <!--            >-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/tvCode"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="Generated Code"-->
+        <!--                android:textColor="#000000"-->
+        <!--                android:textSize="18sp"/>-->
+
+        <!--            <ImageButton-->
+        <!--                android:id="@+id/btnCopy"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:src="@drawable/ic_copy_icon"-->
+        <!--                android:layout_alignParentEnd="true"-->
+        <!--                android:background="@android:color/transparent"-->
+        <!--                android:layout_centerVertical="true"-->
+        <!--                android:layout_marginEnd="10dp" />-->
+
+        <!--        </RelativeLayout>-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etE"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            >
+            android:layout_below="@id/tvHeader"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:hint="Enter new patient's email address"
+            app:boxStrokeColor="@color/mainBlue"
+            app:hintTextColor="@color/mainBlue">
 
-            <TextView
-                android:id="@+id/tvCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Generated Code"
-                android:textColor="#000000"
-                android:textSize="18sp"/>
+            <!--this is the actual edit text which takes the input-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etClientEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:id="@+id/btnCopy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_copy_icon"
-                android:layout_alignParentEnd="true"
-                android:background="@android:color/transparent"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
+<!--    </androidx.cardview.widget.CardView>-->
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/mainBlue"
-        android:layout_below="@id/cardView"
-        android:layout_alignStart="@id/cardView"
-        android:layout_alignEnd="@id/cardView"
-        android:text="Generate new code"
+        android:layout_below="@id/etE"
+        android:layout_alignStart="@id/etE"
+        android:layout_alignEnd="@id/etE"
+        android:text="Send invitation email"
+        android:fontFamily="sans-serif"
         android:layout_marginTop="20dp"
         android:id="@+id/btnNewCode"/>
 
