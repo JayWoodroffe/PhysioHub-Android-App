@@ -7,5 +7,5 @@
     <string name="todays_appointments">today\'s appointments</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name = "default_web_client_id">"639364246440-ff4un79amtmqfllumu1irkh42fl63kn4.apps.googleusercontent.com"</string>
+    <string name="default_web_client_id">"639364246440-ff4un79amtmqfllumu1irkh42fl63kn4.apps.googleusercontent.com"</string>
 </resources>

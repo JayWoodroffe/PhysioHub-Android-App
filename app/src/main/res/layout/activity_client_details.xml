@@ -6,128 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".ClientDetails">
 
-    <include
-        android:id="@+id/ivProfilePicture"
-        layout="@layout/profile_pictureview"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Client Name"
-        android:textSize="25sp"
-        android:layout_marginStart="20dp"
-        android:textStyle="bold"
-        android:layout_toRightOf="@id/ivProfilePicture"
-        android:layout_alignTop="@id/ivProfilePicture"
-        android:layout_marginTop="7dp"
-        android:id="@+id/tvClientName"/>
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/header"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_back"
+            android:id="@+id/ivClose"
+            />
+
+        <include
+            android:id="@+id/ivProfilePicture"
+            layout="@layout/profile_pictureview"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Client Name"
+            android:textSize="25sp"
+            android:layout_marginStart="15dp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/ivProfilePicture"
+            android:layout_alignTop="@id/ivProfilePicture"
+            android:id="@+id/tvClientName"/>
+
+    </LinearLayout>
+
 
     <ImageView
-        android:id="@+id/ivClose"
+        android:id="@+id/btn_info"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_alignTop="@id/ivProfilePicture"
+        android:layout_alignTop="@id/header"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_close"
-        app:tint="@color/mainBlue" />
+        android:src="@drawable/ic_info"
+        app:tint="#9db7e7" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Age:"
-        android:textStyle="bold"
-        android:textColor="@color/light_grey"
-        android:textSize="14sp"
-        android:layout_below="@id/ivProfilePicture"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:id="@+id/tvAge"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="18"
-        android:textSize="14sp"
-        android:layout_alignTop="@id/tvAge"
-        android:layout_toRightOf="@id/tvAge"
-        android:layout_marginStart="120dp"
-        android:id="@+id/tvAgeData"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date of birth:"
-        android:textStyle="bold"
-        android:textColor="@color/light_grey"
-        android:textSize="14sp"
-        android:layout_below="@id/tvAge"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAge"
-        android:id="@+id/tvDob"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10/03/2000"
-        android:textSize="14sp"
-        android:layout_below="@id/tvAge"
-        android:layout_toRightOf="@id/tvAge"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAgeData"
-        android:id="@+id/tvDobData"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/toggleButton"
+        layout="@layout/toggle_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cell number:"
-        android:textStyle="bold"
-        android:textColor="@color/light_grey"
-        android:textSize="14sp"
-        android:layout_below="@id/tvDob"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAge"
-        android:id="@+id/tvNumber"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="000 000 00000"
-        android:textSize="14sp"
-        android:layout_below="@id/tvDob"
-        android:layout_toRightOf="@id/tvAge"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAgeData"
-        android:id="@+id/tvNumberData"
-        android:textStyle="italic"/>
+        android:layout_below="@id/header"
+        android:layout_marginTop="10dp"/>
+    <FrameLayout
+        android:id="@+id/exercise_fragment_container"
+        android:layout_below="@id/toggleButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email:"
-        android:textStyle="bold"
-        android:textColor="@color/light_grey"
-        android:textSize="14sp"
-        android:layout_below="@id/tvNumber"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAge"
-        android:id="@+id/tvEmail"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="jjj@gmsil.com"
-        android:textSize="14sp"
-        android:layout_below="@id/tvNumber"
-        android:layout_toRightOf="@id/tvAge"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAgeData"
-        android:id="@+id/tvEmailData"/>
+
 
     <!--<ImageView
         android:id="@+id/ivCall"
@@ -169,6 +115,13 @@
         android:layout_marginTop="25dp"
         android:backgroundTint="@color/mainBlue"
         android:text="Create Next Appointment" />-->
-
+    <include
+        android:id="@+id/popupInfo"
+        layout="@layout/popup_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>
