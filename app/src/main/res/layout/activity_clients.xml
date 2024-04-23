@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolBarClients"
-        android:paddingTop="10dp">
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolBarClients"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
         android:id="@+id/search_user_layout">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -53,10 +53,8 @@
             app:boxStrokeColor="@color/mainBlue"
             app:hintTextColor="@color/mainBlue"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_toLeftOf="@id/btnSearchClient"
-            android:layout_marginBottom="10dp"
             android:hint="Client name"
             >
 

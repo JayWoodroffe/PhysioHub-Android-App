@@ -1,14 +1,18 @@
 package com.example.mypractice
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.data.ClientDataAccess
 import com.example.mypractice.data.ExerciseDataAccess
@@ -88,17 +92,20 @@ class ClientDetails : AppCompatActivity() {
                 when (menuItem.itemId) {
                     R.id.menu_edit -> {
                         Toast.makeText(this@ClientDetails, "Edit", Toast.LENGTH_SHORT).show()
-                        fragment.setSelectionMode(true)
-                        binding.taskBar.selectAllContainer.visibility=View.VISIBLE
+                        editModeOn()
+
                         true
                     }
                     R.id.menu_add -> {
                         // Handle Add option click
+                        editModeOff()
+                        showDropDownMenu()
                         Toast.makeText(this@ClientDetails, "Add", Toast.LENGTH_SHORT).show()
                         true
                     }
                     R.id.menu_retired -> {
                         // Handle Retired option click
+                        editModeOff()
                         Toast.makeText(this@ClientDetails, "Retire", Toast.LENGTH_SHORT).show()
                         true
                     }
@@ -107,6 +114,10 @@ class ClientDetails : AppCompatActivity() {
             }
             popupMenu.show()
         }
+
+        //bottom navigation handling
+        val btmView = binding.btmExerciseMenu
+        btmView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
 
         //changing toggle bar
         binding.toggleButton.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -170,6 +181,43 @@ class ClientDetails : AppCompatActivity() {
         //TODO add call feature to chat area
     }
 
+    private fun editModeOn()
+    {
+        fragment.setSelectionMode(true)
+        binding.taskBar.selectAllContainer.visibility=View.VISIBLE
+        binding.btmExerciseMenu.visibility=View.VISIBLE
+    }
+
+    private fun editModeOff()
+    {
+        fragment.deselectAll()
+        fragment.setSelectionMode(false)
+        binding.taskBar.selectAllContainer.visibility=View.GONE
+        binding.taskBar.cbSelectAll.isChecked=false
+        binding.btmExerciseMenu.visibility=View.GONE
+    }
+    private fun handleNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.nav_back ->{
+                editModeOff()
+                return true
+            }
+            R.id.nav_retire ->{
+                //TODO add code to retire exercises
+                return true}
+            R.id.nav_delete ->{
+                deleteConfirmed(this)
+                {
+                    //TODO add code to delte exercises
+                }
+                return true}
+            R.id.nav_settings ->{
+                startActivity(Intent(this, Settings::class.java))
+                return true}
+            else -> return false
+        }
+    }
+
     private fun showExerciseFragment() {
         val taskbar: View = findViewById(R.id.taskBar)
         taskbar.visibility = View.VISIBLE
@@ -231,9 +279,41 @@ class ClientDetails : AppCompatActivity() {
             }
         }
     }
-    private fun setClientExercises()
-    {
 
+    private fun showDropDownMenu()
+    {
+        val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
+//            val inflater: MenuInflater = popupMenu.menuInflater
+//            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
+
+        popupMenu.menu.add(Menu.NONE, R.id.menu_addNew, Menu.NONE, "New")
+        popupMenu.menu.add(Menu.NONE, R.id.menu_addExisting, Menu.NONE, "Pre-existing")
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+
+                R.id.menu_addNew -> {true}
+                R.id.menu_addExisting->{true}
+
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+    fun deleteConfirmed(context: Context, onDeleteConfirmed: () -> Unit) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Delete Confirmation")
+            .setMessage("Are you sure you want to delete the selected exercises?")
+            .setPositiveButton("Delete") { dialog, _ ->
+                // Call the onDeleteConfirmed callback when the user confirms deletion
+                onDeleteConfirmed()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun Date.calculateAge(): Int {

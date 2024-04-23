@@ -27,6 +27,36 @@
         android:gravity="left"
         android:textColor="@color/black"
         android:background="?android:attr/selectableItemBackground"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addDropDown"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/menu_addNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New"
+            android:layout_marginStart="25dp"
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:gravity="left"
+            android:textColor="@color/black"
+            android:background="?android:attr/selectableItemBackground"/>
+        <TextView
+            android:id="@+id/menu_addExisting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/menu_addNew"
+            android:text="Pre-existing"
+            android:layout_marginStart="25dp"
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:gravity="left"
+            android:textColor="@color/black"
+            android:background="?android:attr/selectableItemBackground"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/menu_retired"

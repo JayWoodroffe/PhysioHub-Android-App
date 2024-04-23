@@ -81,6 +81,7 @@ class ExerciseAdapter (private val context: Context, private val exercises: List
     fun setSelectionMode(mode: Boolean)
     {
         isSelecionMode= mode
+        notifyDataSetChanged()
     }
 
     fun selectAll()
@@ -95,6 +96,7 @@ class ExerciseAdapter (private val context: Context, private val exercises: List
     fun deselectAll()
     {
         selectedItems.clear()
+
         notifyDataSetChanged()
     }
      fun toggleSelection(position: Int) {
