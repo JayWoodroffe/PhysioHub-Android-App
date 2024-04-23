@@ -1,6 +1,7 @@
-package com.example.mypractice.utils
+package com.example.mypractice
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,12 @@ class ExerciseFragment : Fragment() {
         gridView.adapter = exerciseAdapter
 //        initializeGridView()
 
+//        gridView.setOnItemLongClickListener { _, view, position, _ ->
+//            exerciseAdapter.toggleSelectionMode()
+//            exerciseAdapter.toggleSelection(position)
+//            true
+//        }
+
         return view
     }
 
@@ -65,5 +72,24 @@ class ExerciseFragment : Fragment() {
         exerciseAdapter.notifyDataSetChanged()
     }
 
+    fun toggleSelectionMode() {
+        Log.d("Selection", "Fragment reached")
+        exerciseAdapter.toggleSelectionMode()
+    }
+
+    fun setSelectionMode(mode: Boolean)
+    {
+        exerciseAdapter.setSelectionMode(mode)
+    }
+
+    fun selectAll()
+    {
+        exerciseAdapter.selectAll()
+    }
+
+    fun deselectAll()
+    {
+        exerciseAdapter.deselectAll()
+    }
 
 }

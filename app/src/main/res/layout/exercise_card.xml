@@ -6,49 +6,73 @@
     app:cardCornerRadius="8dp"
     app:cardBackgroundColor="@color/light_white">
 
-    <RelativeLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        >
+        android:padding="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/coloredRectangle"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text=" "
+                android:textColor="@android:color/transparent"
+                android:background="@color/saturday" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/coloredRectangle"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvSetsReps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dimensions"
+                    android:textSize="14sp"
+                    android:textColor="@color/mainBlue"/>
+            </LinearLayout>
+        </RelativeLayout>
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_abstract" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/ivEdit"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvSetsReps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Dimensions"
-                android:textSize="14sp"
-                android:textColor="@color/mainBlue"/>
-        </LinearLayout>
-
-    </RelativeLayout>
+            android:layout_gravity="top|end"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/mainBlue"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cbSelect"
+            android:buttonTint="@color/mainBlue"
+            android:checked="false"
+            android:layout_gravity="top|start"
+            android:layout_margin="0dp"
+            android:padding="0dp"/>
+    </FrameLayout>
 
 </androidx.cardview.widget.CardView>

@@ -45,18 +45,18 @@
     </LinearLayout>
 
 
-    <ImageView
-        android:id="@+id/btn_info"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignTop="@id/header"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_info"
-        app:tint="#9db7e7" />
+<!--    <ImageView-->
+<!--        android:id="@+id/btn_info"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_alignTop="@id/header"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:src="@drawable/ic_info"-->
+<!--        app:tint="#9db7e7" />-->
 
 
 
@@ -65,56 +65,21 @@
         layout="@layout/toggle_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        android:layout_marginTop="10dp"/>
+        android:layout_below="@id/header"/>
+
+    <include
+        android:id="@+id/taskBar"
+        layout="@layout/exercises_task_bar"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/toggleButton"/>
+
     <FrameLayout
         android:id="@+id/exercise_fragment_container"
-        android:layout_below="@id/toggleButton"
+        android:layout_below="@id/taskBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
-
-    <!--<ImageView
-        android:id="@+id/ivCall"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_below="@id/tvDob"
-        android:layout_alignRight="@id/ivClose"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/ic_call"
-        app:tint="@color/mainBlue" />-->
-
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next appointment:"
-        android:textStyle="bold"
-        android:textColor="@color/light_grey"
-        android:textSize="14sp"
-        android:layout_below="@id/tvEmail"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvAge"
-        android:id="@+id/tvNextApp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10/03/2000"
-        android:textSize="14sp"
-        android:layout_below="@id/tvEmailData"
-        android:layout_marginTop="8dp"
-        android:layout_alignStart="@id/tvEmailData"
-        android:id="@+id/tvNextAppData"/>
-
- <Button
-        android:id="@+id/btnNewAppointment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvNextAppData"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="25dp"
-        android:backgroundTint="@color/mainBlue"
-        android:text="Create Next Appointment" />-->
     <include
         android:id="@+id/popupInfo"
         layout="@layout/popup_info"

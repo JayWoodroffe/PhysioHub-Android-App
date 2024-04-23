@@ -1,0 +1,46 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    >
+
+    <!-- Left side: Select all checkbox and text -->
+    <RelativeLayout
+        android:id="@+id/selectAllContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="3dp"
+        android:visibility="gone"
+        >
+
+        <CheckBox
+            android:id="@+id/cbSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:buttonTint="@color/mainBlue" />
+
+        <TextView
+            android:id="@+id/tvSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/cbSelectAll"
+            android:layout_centerVertical="true"
+            android:text="Select all"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <!-- Right side: Three-dot menu -->
+    <ImageView
+        android:id="@+id/ivExercisesMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_menu_dots"
+        android:onClick="showPopupMenu" />
+</RelativeLayout>

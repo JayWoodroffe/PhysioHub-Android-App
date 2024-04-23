@@ -1,13 +1,13 @@
 package com.example.mypractice
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.Menu
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.PopupWindow
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.data.ClientDataAccess
@@ -15,7 +15,6 @@ import com.example.mypractice.data.ExerciseDataAccess
 import com.example.mypractice.databinding.ActivityClientDetailsBinding
 import com.example.mypractice.model.ClientModel
 import com.example.mypractice.model.ExerciseModel
-import com.example.mypractice.utils.ExerciseFragment
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -48,9 +47,6 @@ class ClientDetails : AppCompatActivity() {
             startActivity(Intent(this, Clients::class.java))
         }
 
-        binding.btnInfo.setOnClickListener {
-            showPopup(it)
-        }
 
         //setting up exercises tab
         //TODO get data from firestore
@@ -69,9 +65,50 @@ class ClientDetails : AppCompatActivity() {
             fragment.setExercises(exerList)
         }
 
+        val fragContainer: View = findViewById(R.id.exercise_fragment_container)
+        fragContainer.setOnLongClickListener {
+
+            fragment.setSelectionMode(true)
+            Log.d("Select", "container long click")
+            true
+        }
 
 
+        binding.taskBar.ivExercisesMenu.setOnClickListener {
 
+            val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
+//            val inflater: MenuInflater = popupMenu.menuInflater
+//            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
+
+            popupMenu.menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, "Edit")
+            popupMenu.menu.add(Menu.NONE, R.id.menu_add, Menu.NONE, "Add")
+            popupMenu.menu.add(Menu.NONE, R.id.menu_retired, Menu.NONE, "Retired")
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_edit -> {
+                        Toast.makeText(this@ClientDetails, "Edit", Toast.LENGTH_SHORT).show()
+                        fragment.setSelectionMode(true)
+                        binding.taskBar.selectAllContainer.visibility=View.VISIBLE
+                        true
+                    }
+                    R.id.menu_add -> {
+                        // Handle Add option click
+                        Toast.makeText(this@ClientDetails, "Add", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.menu_retired -> {
+                        // Handle Retired option click
+                        Toast.makeText(this@ClientDetails, "Retire", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
+
+        //changing toggle bar
         binding.toggleButton.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Handle tab selection
@@ -80,6 +117,8 @@ class ClientDetails : AppCompatActivity() {
                     when (it.text) {
                         "Exercises" -> {
                             // Show the ExerciseFragment
+
+                            hidePopUp()
                             showExerciseFragment()
                         }
                         // Add more cases for other tabs if needed
@@ -87,7 +126,16 @@ class ClientDetails : AppCompatActivity() {
                     when (it.text) {
                         "Chat" -> {
                             // Show the ExerciseFragment
+                            hidePopUp()
                             hideExerciseFragment()
+                        }
+                        // Add more cases for other tabs if needed
+                    }
+                    when (it.text) {
+                        "Info" -> {
+                            // Show the ExerciseFragment
+                            hideExerciseFragment()
+                            showPopup(it)
                         }
                         // Add more cases for other tabs if needed
                     }
@@ -104,12 +152,28 @@ class ClientDetails : AppCompatActivity() {
 
         })
 
+        binding.taskBar.cbSelectAll.setOnCheckedChangeListener{ _, isChecked->
+            if(binding.taskBar.selectAllContainer.visibility == View.VISIBLE){
+                if(isChecked)
+                {
+                    fragment.selectAll()
+                }
+                else
+                {
+                    fragment.deselectAll()
+                }
+                }
+        }
+
 
         //call button
         //TODO add call feature to chat area
     }
 
     private fun showExerciseFragment() {
+        val taskbar: View = findViewById(R.id.taskBar)
+        taskbar.visibility = View.VISIBLE
+
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.show(fragment)
@@ -117,6 +181,9 @@ class ClientDetails : AppCompatActivity() {
     }
 
     private fun hideExerciseFragment() {
+        val taskbar: View = findViewById(R.id.taskBar)
+        taskbar.visibility = View.GONE
+
         // Remove the ExerciseFragment from the container
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -124,19 +191,16 @@ class ClientDetails : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    private fun showPopup(anchorView: View)
+    private fun showPopup(anchorView: TabLayout.Tab)
     {
         val popupInfoLayout: View = findViewById(R.id.popupInfo)
-        if (popupInfoLayout.visibility == View.VISIBLE) {
-            popupInfoLayout.visibility = View.GONE
-        } else {
             popupInfoLayout.visibility = View.VISIBLE
+    }
 
-            binding.popupInfo.imClose.setOnClickListener {
-                popupInfoLayout.visibility = View.GONE
-            }
-        }
-
+    private fun hidePopUp()
+    {
+        val popupInfoLayout: View = findViewById(R.id.popupInfo)
+        popupInfoLayout.visibility = View.GONE
     }
 
     private fun setClientDetails()

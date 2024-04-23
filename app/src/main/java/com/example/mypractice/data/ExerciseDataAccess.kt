@@ -13,7 +13,7 @@ object ExerciseDataAccess {
         try {
             collection.whereEqualTo("clientId", clientId).get().addOnSuccessListener { results ->
                 for (document in results.documents) {
-                    val id = document.id
+                    val id = document.getLong("id")?.toInt()?:0
                     val name = document.getString("name") ?: ""
                     val description = document.getString("description") ?: ""
                     val sets = document.getLong("sets")?.toInt() ?: 0
