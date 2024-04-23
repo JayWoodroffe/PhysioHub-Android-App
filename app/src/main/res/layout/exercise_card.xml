@@ -45,7 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dimensions"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textColor="@color/mainBlue"/>
         </LinearLayout>
 
     </RelativeLayout>

@@ -11,8 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.data.ClientDataAccess
+import com.example.mypractice.data.ExerciseDataAccess
 import com.example.mypractice.databinding.ActivityClientDetailsBinding
 import com.example.mypractice.model.ClientModel
+import com.example.mypractice.model.ExerciseModel
 import com.example.mypractice.utils.ExerciseFragment
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
@@ -24,6 +26,7 @@ class ClientDetails : AppCompatActivity() {
     private lateinit var binding: ActivityClientDetailsBinding
     private lateinit var clientId:String
     private lateinit var popupWindow: PopupWindow
+    private lateinit var fragment : ExerciseFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientDetailsBinding.inflate(layoutInflater)
@@ -54,12 +57,20 @@ class ClientDetails : AppCompatActivity() {
         val tabToSelect = binding.toggleButton.tabLayout.getTabAt(1)
         tabToSelect?.select()
 
-        val fragment = ExerciseFragment()
+        fragment = ExerciseFragment()
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.exerciseFragmentContainer.id, fragment)
         fragmentTransaction.commit()
+
+        ExerciseDataAccess.getExercisesForClient(clientId){ exerList: List<ExerciseModel> ->
+            Log.d("Exercises", "# ${exerList.size}")
+            fragment.setExercises(exerList)
+        }
+
+
+
 
         binding.toggleButton.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -94,79 +105,23 @@ class ClientDetails : AppCompatActivity() {
         })
 
 
-
-
-
-
-
-//        FirebaseUtil.firestore.collection("users").document(clientId!!)
-//            .get()
-//            .addOnSuccessListener { document ->
-//                // Check if the document exists
-//                if (document != null && document.exists()) {
-//                    val name = document.getString("name")
-//                    number = document.getString("number").toString()
-//                    val email = document.getString("email")
-//                    val dobTS = document.getTimestamp("dob")
-//                    val dob: Date? = dobTS?.toDate()
-//
-//                    // Check if dob is not null before formatting
-//                    dob?.let {
-//                        val formattedDate =
-//                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
-//
-//                        // Check if tvDobData is not null before setting the text
-//                        val age = dob.calculateAge()
-//                        binding.tvDobData?.text = formattedDate
-//                        binding.tvAgeData?.text = age.toString()
-//                    } ?: run {
-//                        // Handle the case when dob is null
-//                        binding.tvDobData?.text = "N/A"
-//                    }
-//
-//                    // Update the UI with client information
-//                    binding.tvClientName?.text = name
-//                    binding.tvNumberData?.text = number
-//                    binding.tvEmailData?.text = email
-//                } else {
-//                    Log.d("ClientDetails", "Document with ID $clientId does not exist.")
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                binding.tvClientName.text = "not found"
-//            }
-
-
         //call button
         //TODO add call feature to chat area
-//        binding.tvNumberData.setOnClickListener {
-//
-//            val dialIntent = Intent (Intent.ACTION_DIAL, Uri.parse("tel:$number"))
-//            // Check if there is an app that can handle the Intent before starting
-//            if (dialIntent.resolveActivity(packageManager) != null) {
-//                startActivity(dialIntent)
-//            } else {
-//                // Handle the case where no app can handle the dial Intent
-//                Toast.makeText(this, "No app can handle the dial action", Toast.LENGTH_SHORT).show()
-//            }
-//        }
     }
 
     private fun showExerciseFragment() {
-        val fragment = ExerciseFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.exercise_fragment_container, fragment)
-            .commit()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.show(fragment)
+        fragmentTransaction.commit()
     }
 
     private fun hideExerciseFragment() {
         // Remove the ExerciseFragment from the container
-        val fragment = supportFragmentManager.findFragmentById(R.id.exercise_fragment_container)
-        fragment?.let {
-            supportFragmentManager.beginTransaction()
-                .remove(fragment)
-                .commit()
-        }
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.hide(fragment)
+        fragmentTransaction.commit()
     }
 
     private fun showPopup(anchorView: View)
@@ -211,6 +166,10 @@ class ClientDetails : AppCompatActivity() {
                 Log.d("ClientDetails", "No client found with ID: $clientId")
             }
         }
+    }
+    private fun setClientExercises()
+    {
+
     }
 
     private fun Date.calculateAge(): Int {

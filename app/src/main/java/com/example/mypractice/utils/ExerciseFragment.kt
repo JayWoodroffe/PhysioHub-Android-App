@@ -16,6 +16,7 @@ class ExerciseFragment : Fragment() {
 
     //list of exercise data
     private val exercises = mutableListOf<ExerciseModel>()
+    private lateinit var exerciseAdapter: ExerciseAdapter
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -33,42 +34,35 @@ class ExerciseFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_exercise, container, false)
         gridView = view.findViewById(R.id.gridView)
 
-        initializeGridView()
+        exerciseAdapter = ExerciseAdapter(requireContext(), exercises)
+        gridView.adapter = exerciseAdapter
+//        initializeGridView()
 
         return view
     }
 
     // Populate the grid view with exercises
-    private fun initializeGridView() {
-        // Populate exercises (replace with your actual data)
-        populateExercises()
+//    private fun initializeGridView() {
+//
+//        // Set up the grid adapter
+//        val gridAdapter = ExerciseAdapter(requireContext(), exercises)
+//        gridView.adapter = gridAdapter
+//
+//        // Set item click listener
+//        gridView.onItemClickListener =
+//            AdapterView.OnItemClickListener { _, _, position, _ ->
+//                // Handle item click here
+//                val selectedExercise = exercises[position]
+//                // Do something with the selected exercise
+//            }
+//    }
 
-        // Set up the grid adapter
-        val gridAdapter = ExerciseAdapter(requireContext(), exercises)
-        gridView.adapter = gridAdapter
 
-        // Set item click listener
-        gridView.onItemClickListener =
-            AdapterView.OnItemClickListener { _, _, position, _ ->
-                // Handle item click here
-                val selectedExercise = exercises[position]
-                // Do something with the selected exercise
-            }
-    }
-
-    // Populate the exercises list with sample data (replace with your actual data retrieval logic)
-    private fun populateExercises() {
-        for (i in 1..10) {
-            val exercise = ExerciseModel(
-                id = i,
-                name = "Exercise $i",
-                description = "Description of Exercise $i",
-                sets = 3,
-                reps = 10,
-                clientId = "client_$i"
-            )
-            exercises.add(exercise)
-        }
+    fun setExercises(exercises: List<ExerciseModel>)
+    {
+        this.exercises.clear()
+        this.exercises.addAll(exercises)
+        exerciseAdapter.notifyDataSetChanged()
     }
 
 

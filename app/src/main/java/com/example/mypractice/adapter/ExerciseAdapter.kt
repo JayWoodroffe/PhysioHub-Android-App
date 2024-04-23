@@ -47,7 +47,7 @@ class ExerciseAdapter (private val context: Context, private val exercises: List
 
         //bind data to views
         holder.tvTitle.text= exercise.name
-        holder.tvDescription.text = exercise.description
+        holder.tvDescription.text = exercise.description.take(40) + if (exercise.description.length > 40) "..." else ""
         holder.tvSetsReps.text = "${exercise.sets} sets x ${exercise.reps} reps"
         return itemView!!
     }

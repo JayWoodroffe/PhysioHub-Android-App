@@ -40,6 +40,10 @@ class InvitationCode : AppCompatActivity() {
                 Toast.makeText(this, "Incorrect email format", Toast.LENGTH_SHORT).show()
         }
 
+        binding.imBack.setOnClickListener {
+            startActivity(Intent(this, Clients::class.java))
+        }
+
     }
 
     private fun checkEmail(): Boolean
@@ -99,13 +103,6 @@ class InvitationCode : AppCompatActivity() {
                 it
             )
         }
-    }
-
-    fun copyToClipboard(code:String)
-    {
-        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Generated Code", code)
-        clipboard.setPrimaryClip(clip)
     }
 
 }
