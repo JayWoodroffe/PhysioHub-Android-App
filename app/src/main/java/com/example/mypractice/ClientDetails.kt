@@ -57,18 +57,21 @@ class ClientDetails : AppCompatActivity() {
         val tabToSelect = binding.toggleButton.tabLayout.getTabAt(1)
         tabToSelect?.select()
 
+        val bundle=Bundle()
+        bundle.putString("clientID", clientId)
+
+
         fragment = ExerciseFragment()
+        fragment.setClientId(clientId)
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.exerciseFragmentContainer.id, fragment)
         fragmentTransaction.commit()
 
-        ExerciseDataAccess.getExercisesForClient(clientId){ exerList: List<ExerciseModel> ->
-            Log.d("Exercises", "# ${exerList.size}")
-            fragment.setExercises(exerList)
-        }
+//        displayActiveExercises()
 
+        //TODO long click does nothing
         val fragContainer: View = findViewById(R.id.exercise_fragment_container)
         fragContainer.setOnLongClickListener {
 
@@ -78,46 +81,47 @@ class ClientDetails : AppCompatActivity() {
         }
 
 
-        binding.taskBar.ivExercisesMenu.setOnClickListener {
+//        binding.taskBar.ivExercisesMenu.setOnClickListener {
+//
+//            val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
+////            val inflater: MenuInflater = popupMenu.menuInflater
+////            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
+//
+//            popupMenu.menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, "Edit")
+//            popupMenu.menu.add(Menu.NONE, R.id.menu_add, Menu.NONE, "Add")
+//            popupMenu.menu.add(Menu.NONE, R.id.menu_retired, Menu.NONE, "Retired")
+//
+//            popupMenu.setOnMenuItemClickListener { menuItem ->
+//                when (menuItem.itemId) {
+//                    R.id.menu_edit -> {
+//                        Toast.makeText(this@ClientDetails, "Edit", Toast.LENGTH_SHORT).show()
+//                        editModeOn()
+//
+//                        true
+//                    }
+//                    R.id.menu_add -> {
+//                        // Handle Add option click
+//                        editModeOff()
+//                        showDropDownMenu()
+//                        Toast.makeText(this@ClientDetails, "Add", Toast.LENGTH_SHORT).show()
+//                        true
+//                    }
+//                    R.id.menu_retired -> {
+//                        // Handle Retired option click
+//                        editModeOff()
+//                        displayRetiredExercises()
+//                        Toast.makeText(this@ClientDetails, "Retire", Toast.LENGTH_SHORT).show()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//            popupMenu.show()
+//        }
 
-            val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
-//            val inflater: MenuInflater = popupMenu.menuInflater
-//            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
-
-            popupMenu.menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, "Edit")
-            popupMenu.menu.add(Menu.NONE, R.id.menu_add, Menu.NONE, "Add")
-            popupMenu.menu.add(Menu.NONE, R.id.menu_retired, Menu.NONE, "Retired")
-
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.menu_edit -> {
-                        Toast.makeText(this@ClientDetails, "Edit", Toast.LENGTH_SHORT).show()
-                        editModeOn()
-
-                        true
-                    }
-                    R.id.menu_add -> {
-                        // Handle Add option click
-                        editModeOff()
-                        showDropDownMenu()
-                        Toast.makeText(this@ClientDetails, "Add", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    R.id.menu_retired -> {
-                        // Handle Retired option click
-                        editModeOff()
-                        Toast.makeText(this@ClientDetails, "Retire", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
-        }
-
-        //bottom navigation handling
-        val btmView = binding.btmExerciseMenu
-        btmView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
+//        //bottom navigation handling
+//        val btmView = binding.btmExerciseMenu
+//        btmView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
 
         //changing toggle bar
         binding.toggleButton.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -163,60 +167,60 @@ class ClientDetails : AppCompatActivity() {
 
         })
 
-        binding.taskBar.cbSelectAll.setOnCheckedChangeListener{ _, isChecked->
-            if(binding.taskBar.selectAllContainer.visibility == View.VISIBLE){
-                if(isChecked)
-                {
-                    fragment.selectAll()
-                }
-                else
-                {
-                    fragment.deselectAll()
-                }
-                }
-        }
+//        binding.taskBar.cbSelectAll.setOnCheckedChangeListener{ _, isChecked->
+//            if(binding.taskBar.selectAllContainer.visibility == View.VISIBLE){
+//                if(isChecked)
+//                {
+//                    fragment.selectAll()
+//                }
+//                else
+//                {
+//                    fragment.deselectAll()
+//                }
+//                }
+//        }
 
 
         //call button
         //TODO add call feature to chat area
     }
 
-    private fun editModeOn()
-    {
-        fragment.setSelectionMode(true)
-        binding.taskBar.selectAllContainer.visibility=View.VISIBLE
-        binding.btmExerciseMenu.visibility=View.VISIBLE
-    }
-
-    private fun editModeOff()
-    {
-        fragment.deselectAll()
-        fragment.setSelectionMode(false)
-        binding.taskBar.selectAllContainer.visibility=View.GONE
-        binding.taskBar.cbSelectAll.isChecked=false
-        binding.btmExerciseMenu.visibility=View.GONE
-    }
-    private fun handleNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.nav_back ->{
-                editModeOff()
-                return true
-            }
-            R.id.nav_retire ->{
-                //TODO add code to retire exercises
-                return true}
-            R.id.nav_delete ->{
-                deleteConfirmed(this)
-                {
-                    //TODO add code to delte exercises
-                }
-                return true}
-            R.id.nav_settings ->{
-                startActivity(Intent(this, Settings::class.java))
-                return true}
-            else -> return false
-        }
-    }
+//    private fun editModeOn()
+//    {
+//        fragment.setSelectionMode(true)
+//        binding.taskBar.selectAllContainer.visibility=View.VISIBLE
+//        binding.btmExerciseMenu.visibility=View.VISIBLE
+//    }
+//
+//    private fun editModeOff()
+//    {
+//        fragment.deselectAll()
+//        fragment.setSelectionMode(false)
+//        binding.taskBar.selectAllContainer.visibility=View.GONE
+//        binding.taskBar.cbSelectAll.isChecked=false
+//        binding.btmExerciseMenu.visibility=View.GONE
+//    }
+//    private fun handleNavigationItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId){
+//            R.id.nav_back ->{
+//                editModeOff()
+//                return true
+//            }
+//            R.id.nav_retire ->{
+//                //TODO add code to retire exercises
+//                return true}
+//            R.id.nav_delete ->{
+//                deleteConfirmed(this)
+//                {
+//                    //TODO add code to delte exercises
+//                }
+//                return true}
+//            R.id.nav_settings ->{
+//                startActivity(Intent(this, Settings::class.java))
+//                return true}
+//            else -> return false
+//        }
+//    }
 
     private fun showExerciseFragment() {
         val taskbar: View = findViewById(R.id.taskBar)
@@ -251,6 +255,26 @@ class ClientDetails : AppCompatActivity() {
         popupInfoLayout.visibility = View.GONE
     }
 
+//    private fun displayRetiredExercises()
+//    {
+//        binding.taskBar.retiredContainer.visibility=View.VISIBLE
+//        binding.taskBar.ivBack.setOnClickListener {
+//            displayActiveExercises()
+//        }
+//        ExerciseDataAccess.getRetiredExercisesForClient(clientId){ exerList: List<ExerciseModel> ->
+//            Log.d("Exercises", "# ${exerList.size}")
+//            fragment.setExercises(exerList)
+//        }
+//    }
+//    private fun displayActiveExercises()
+//    {
+//        binding.taskBar.retiredContainer.visibility=View.GONE
+//        ExerciseDataAccess.getActiveExercisesForClient(clientId){ exerList: List<ExerciseModel> ->
+//            Log.d("Exercises", "# ${exerList.size}")
+//            fragment.setExercises(exerList)
+//        }
+//    }
+
     private fun setClientDetails()
     {
         //querying the rest of the information about the client
@@ -280,41 +304,41 @@ class ClientDetails : AppCompatActivity() {
         }
     }
 
-    private fun showDropDownMenu()
-    {
-        val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
-//            val inflater: MenuInflater = popupMenu.menuInflater
-//            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
-
-        popupMenu.menu.add(Menu.NONE, R.id.menu_addNew, Menu.NONE, "New")
-        popupMenu.menu.add(Menu.NONE, R.id.menu_addExisting, Menu.NONE, "Pre-existing")
-
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-
-                R.id.menu_addNew -> {true}
-                R.id.menu_addExisting->{true}
-
-                else -> false
-            }
-        }
-        popupMenu.show()
-    }
-    fun deleteConfirmed(context: Context, onDeleteConfirmed: () -> Unit) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Delete Confirmation")
-            .setMessage("Are you sure you want to delete the selected exercises?")
-            .setPositiveButton("Delete") { dialog, _ ->
-                // Call the onDeleteConfirmed callback when the user confirms deletion
-                onDeleteConfirmed()
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-        val dialog = builder.create()
-        dialog.show()
-    }
+//    private fun showDropDownMenu()
+//    {
+//        val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
+////            val inflater: MenuInflater = popupMenu.menuInflater
+////            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
+//
+//        popupMenu.menu.add(Menu.NONE, R.id.menu_addNew, Menu.NONE, "New")
+//        popupMenu.menu.add(Menu.NONE, R.id.menu_addExisting, Menu.NONE, "Pre-existing")
+//
+//        popupMenu.setOnMenuItemClickListener { menuItem ->
+//            when (menuItem.itemId) {
+//
+//                R.id.menu_addNew -> {true}
+//                R.id.menu_addExisting->{true}
+//
+//                else -> false
+//            }
+//        }
+//        popupMenu.show()
+//    }
+//    fun deleteConfirmed(context: Context, onDeleteConfirmed: () -> Unit) {
+//        val builder = AlertDialog.Builder(context)
+//        builder.setTitle("Delete Confirmation")
+//            .setMessage("Are you sure you want to delete the selected exercises?")
+//            .setPositiveButton("Delete") { dialog, _ ->
+//                // Call the onDeleteConfirmed callback when the user confirms deletion
+//                onDeleteConfirmed()
+//                dialog.dismiss()
+//            }
+//            .setNegativeButton("Cancel") { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
 
     private fun Date.calculateAge(): Int {
         val currentDate = Calendar.getInstance().time

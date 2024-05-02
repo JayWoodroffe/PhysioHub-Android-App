@@ -6,5 +6,7 @@ data class ExerciseModel (
     val description: String,
     val sets: Int,
     val reps: Int,
-    val clientId: String
+    val clientId: String,
+    val doctorId: String,
+    val retired: Boolean
 )

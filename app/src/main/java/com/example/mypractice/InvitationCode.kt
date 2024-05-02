@@ -98,6 +98,7 @@ class InvitationCode : AppCompatActivity() {
 
     fun addCodeToDb(code:String)
     {
+
         DoctorDataHolder.getLoggedInDoctor()?.certId?.let {
             ClientDataAccess.addInviteCode(code,
                 it

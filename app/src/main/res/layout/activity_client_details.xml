@@ -67,19 +67,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header"/>
 
-    <include
-        android:id="@+id/taskBar"
-        layout="@layout/exercises_task_bar"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_below="@id/toggleButton"/>
+<!--    <include-->
+<!--        android:id="@+id/taskBar"-->
+<!--        layout="@layout/exercises_task_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_below="@id/toggleButton"/>-->
 
     <FrameLayout
         android:id="@+id/exercise_fragment_container"
-        android:layout_below="@id/taskBar"
+        android:layout_below="@id/toggleButton"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/btmExerciseMenu"/>
+        android:layout_height="match_parent"/>
 
     <include
         android:id="@+id/popupInfo"
@@ -89,23 +88,24 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="gone"/>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/btmExerciseMenu"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/round_bar"
-        android:elevation="2dp"
-        app:itemIconSize="25dp"
-        app:itemIconTint="@drawable/icon_selector"
-        app:itemRippleColor="@android:color/transparent"
-        app:itemBackground="@android:color/transparent"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/exercise_bottom_menu"
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/btmExerciseMenu"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginEnd="10dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:background="@drawable/round_bar"-->
+<!--        android:elevation="2dp"-->
+<!--        app:itemIconSize="25dp"-->
+<!--        app:itemIconTint="@drawable/icon_selector"-->
+<!--        app:itemRippleColor="@android:color/transparent"-->
+<!--        app:itemBackground="@android:color/transparent"-->
+<!--        app:labelVisibilityMode="unlabeled"-->
+<!--        app:menu="@menu/exercise_bottom_menu"-->
+<!--        android:visibility="gone"-->
 
-        />
+<!--        />-->
 
 </RelativeLayout>
