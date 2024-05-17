@@ -220,6 +220,8 @@ class ExerciseFragment : Fragment() , ExerciseAdapterListener {
     private fun displayRetiredExercises()
     {
         retiredMode = true
+        deselectAll()
+        
         binding.taskBar.ivExercisesMenu.visibility= View.GONE
         binding.taskBar.retiredContainer.visibility=View.VISIBLE
         var backButton = binding.taskBar.retiredContainer.findViewById<ImageView>(R.id.ivBack)
@@ -246,7 +248,7 @@ class ExerciseFragment : Fragment() , ExerciseAdapterListener {
         }
     }
 
-    fun deleteConfirmed(context: Context, onDeleteConfirmed: () -> Unit) {
+    private fun deleteConfirmed(context: Context, onDeleteConfirmed: () -> Unit) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Delete Confirmation")
             .setMessage("Are you sure you want to delete the selected exercises?")
@@ -288,6 +290,16 @@ class ExerciseFragment : Fragment() , ExerciseAdapterListener {
 
     override fun onItemDeselected() {
         binding.taskBar.cbSelectAll.isChecked=false
+    }
+
+    override fun onEditClick(position:Int) {
+        val exercise = exercises[position]
+        val intent = Intent(requireContext(), NewExercise::class.java).apply{
+            putExtra("ClientId", clientId)
+            putExtra("EditMode", true)
+            putExtra("ExerciseModel", exercise)
+        }
+        startActivity(intent)
     }
 
     fun setClientId(id: String)
@@ -375,7 +387,7 @@ class ExerciseFragment : Fragment() , ExerciseAdapterListener {
             onSuccess = {
                 exerciseAdapter.deselectAll()
                 setSelectionMode(false)
-                if(retiredMode)g
+                if(retiredMode)
                 {
                     displayRetiredExercises()
                 }

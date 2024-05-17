@@ -172,4 +172,33 @@ object ExerciseDataAccess {
 
     }
 
+    fun updateExercise(exercise: ExerciseModel, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val query = collection.whereEqualTo("id", exercise.id)
+        query.get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentSnapshot = querySnapshot.documents[0]
+                    val exerciseRef = documentSnapshot.reference
+                    // Now you have the reference to the document with the specified ID field
+                    // Update the document using this reference
+                    exerciseRef.set(exercise, SetOptions.merge())
+                        .addOnSuccessListener {
+                            Log.d("Exercise", "Exercise updated successfully")
+                            onSuccess()
+                        }
+                        .addOnFailureListener { e->
+                            Log.e("Exercise", "Error updating exercise: $e")
+                            onFailure(e)
+                        }
+                } else {
+                    // No document found with the specified id
+                    Log.d("Firestore", "No document found with id: ${exercise.id}")
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle failure
+                onFailure(e)
+            }
+    }
+
 }

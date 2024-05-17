@@ -5,4 +5,6 @@ interface ExerciseAdapterListener {
     fun onItemLongClick(position: Int)
     fun onAllItemsSelected()
     fun onItemDeselected()
+
+    fun onEditClick(position:Int)
 }

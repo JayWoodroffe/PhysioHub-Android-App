@@ -27,30 +27,92 @@
         android:layout_marginStart="35dp"
         android:id="@+id/tvTitle"/>
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imBack"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:text="Name:"
-        android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/tvAbout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/nameContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imBack"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:text="About:"
-        android:layout_alignTop="@id/etD"
-        android:textSize="20dp" />
+        android:layout_below="@id/tvTitle"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imBack"
+            android:layout_marginStart="30dp"
+            android:text="Name:"
+            android:textSize="20dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etN"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="20dp"
+            android:layout_toRightOf="@id/tvName"
+            app:boxStrokeColor="@color/mainBlue"
+            app:hintTextColor="@color/mainBlue">
+
+            <!--this is the actual edit text which takes the input-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/aboutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameContainer"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvAbout"
+            android:layout_marginStart="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imBack"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="About:"
+            android:layout_alignTop="@id/etD"
+            android:textSize="20dp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etD"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="@color/mainBlue"
+            app:hintTextColor="@color/mainBlue"
+            android:layout_toRightOf="@id/tvName"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/etN"
+            android:inputType="textMultiLine"
+            android:lines="10"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            >
+
+            <!--this is the actual edit text which takes the input-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:gravity="top|start"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/setsContainer"
@@ -58,8 +120,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:layout_below="@id/etD"
-        android:layout_alignStart="@id/etD"
+        android:layout_below="@id/aboutContainer"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="25dp">
 
         <TextView
@@ -82,7 +144,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:layout_below="@id/etD"
+        android:layout_below="@id/aboutContainer"
         android:layout_toRightOf="@id/setsContainer"
         android:layout_marginStart="40dp"
         android:layout_marginTop="25dp">
@@ -105,55 +167,9 @@
 
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etN"
 
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/mainBlue"
-        app:hintTextColor="@color/mainBlue"
-        android:layout_toRightOf="@id/tvName"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/tvTitle"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        >
 
-        <!--this is the actual edit text which takes the input-->
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etD"
-
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/mainBlue"
-        app:hintTextColor="@color/mainBlue"
-        android:layout_toRightOf="@id/tvName"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/etN"
-        android:inputType="textMultiLine"
-        android:lines="5"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        >
-
-        <!--this is the actual edit text which takes the input-->
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
 
     <Button

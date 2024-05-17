@@ -12,15 +12,32 @@ import com.example.mypractice.model.ExerciseModel
 class NewExercise : AppCompatActivity() {
     private lateinit var binding: ActivityNewExerciseBinding
     private lateinit var clientId: String
+    private  var editMode: Boolean = false
+    private lateinit var exerciseModel: ExerciseModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewExerciseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         clientId = intent.getStringExtra("ClientId").toString()
+        editMode = intent.getBooleanExtra("EditMode", false)
+        Log.d("Exercise", "editmode: $editMode")
         setUpNumberPickers()
+        if (editMode)
+        {
+            exerciseModel = intent.getSerializableExtra("ExerciseModel") as ExerciseModel
+            populateFields(exerciseModel)
+        }
+
         binding.btnCreate.setOnClickListener {
-            createExercise()
+            if(editMode){
+                updateExercise()
+            }
+            else
+            {
+                createExercise()
+            }
+
         }
 
         binding.imBack.setOnClickListener {
@@ -28,6 +45,42 @@ class NewExercise : AppCompatActivity() {
         }
     }
 
+    private fun populateFields(exerciseModel: ExerciseModel)
+    {
+        binding.etName.setText( exerciseModel.name)
+        binding.etDescription.setText(exerciseModel.description)
+        binding.npSets.value = exerciseModel.sets
+        binding.npReps.value = exerciseModel.reps
+
+    }
+
+    private fun updateExercise()
+    {
+        val name = binding.etName.text.toString()
+        val description = binding.etDescription.text.toString()
+        val sets = binding.npSets.value
+        val reps = binding.npReps.value
+
+        if (name.isNotBlank() && description.isNotBlank() && clientId.isNotBlank() && exerciseModel.doctorId != null) {
+
+            exerciseModel.name = name
+            exerciseModel.description = description
+            exerciseModel.sets = sets
+            exerciseModel.reps = reps
+
+            ExerciseDataAccess.updateExercise(exerciseModel,
+                onSuccess = {
+                    // Success callback
+                    Log.d("Exercise", "Exercise updated successfully")
+                    openPreviousActivity()
+                },
+                onFailure = { e ->
+                    // Failure callback
+                    Log.d("Exercise", "Error updating exercise: $e")
+                }
+            )
+        }
+    }
     private fun createExercise()
     {
         var name = binding.etName.text.toString()
@@ -35,8 +88,6 @@ class NewExercise : AppCompatActivity() {
         var sets = binding.npSets.value
         var reps = binding.npReps.value
         var doctorId = DoctorDataHolder.getLoggedInDoctor()?.certId
-
-
 
         var largest = 0
         ExerciseDataAccess.getMaxExerciseId(

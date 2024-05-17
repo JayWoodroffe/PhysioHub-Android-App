@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.mypractice.R
 import com.example.mypractice.model.ExerciseModel
@@ -24,6 +25,7 @@ class ExerciseAdapter (private val context: Context,
         lateinit var tvSetsReps: TextView
         lateinit var cbSelect: CheckBox
         lateinit var coloredRectangle: TextView
+        lateinit var ivEdit: ImageView
     }
     override fun getCount():Int{
         return exercises.size
@@ -34,6 +36,7 @@ class ExerciseAdapter (private val context: Context,
     }
 
     override fun getItemId(position:Int): Long {
+        Log.d("Exercise", ""+exercises[position].id)
         return exercises[position].id.toLong()
     }
 
@@ -53,6 +56,7 @@ class ExerciseAdapter (private val context: Context,
             holder.tvSetsReps = itemView.findViewById(R.id.tvSetsReps)
             holder.cbSelect = itemView.findViewById(R.id.cbSelect)
             itemView.tag = holder
+            holder.ivEdit = itemView.findViewById(R.id.ivEdit)
 
         }
         else{
@@ -75,6 +79,9 @@ class ExerciseAdapter (private val context: Context,
         holder.cbSelect.visibility = if (isSelectionMode)View.VISIBLE else View.GONE
         holder.cbSelect.isChecked = isItemSelected(position)
 
+        holder.ivEdit.setOnClickListener {
+            listener.onEditClick(position)
+        }
 
         itemView?.setOnClickListener{
             if(isSelectionMode)
@@ -92,6 +99,7 @@ class ExerciseAdapter (private val context: Context,
             }
             true
         }
+
 
 
         return itemView!!
@@ -124,7 +132,6 @@ class ExerciseAdapter (private val context: Context,
     fun deselectAll()
     {
         selectedItems.clear()
-
         notifyDataSetChanged()
     }
      fun toggleSelection(position: Int) {
