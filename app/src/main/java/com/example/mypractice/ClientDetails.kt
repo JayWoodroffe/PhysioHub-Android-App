@@ -53,7 +53,7 @@ class ClientDetails : AppCompatActivity() {
 
 
         //setting up exercises tab
-        //TODO get data from firestore
+
         val tabToSelect = binding.toggleButton.tabLayout.getTabAt(1)
         tabToSelect?.select()
 
@@ -79,49 +79,6 @@ class ClientDetails : AppCompatActivity() {
             Log.d("Select", "container long click")
             true
         }
-
-
-//        binding.taskBar.ivExercisesMenu.setOnClickListener {
-//
-//            val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
-////            val inflater: MenuInflater = popupMenu.menuInflater
-////            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
-//
-//            popupMenu.menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, "Edit")
-//            popupMenu.menu.add(Menu.NONE, R.id.menu_add, Menu.NONE, "Add")
-//            popupMenu.menu.add(Menu.NONE, R.id.menu_retired, Menu.NONE, "Retired")
-//
-//            popupMenu.setOnMenuItemClickListener { menuItem ->
-//                when (menuItem.itemId) {
-//                    R.id.menu_edit -> {
-//                        Toast.makeText(this@ClientDetails, "Edit", Toast.LENGTH_SHORT).show()
-//                        editModeOn()
-//
-//                        true
-//                    }
-//                    R.id.menu_add -> {
-//                        // Handle Add option click
-//                        editModeOff()
-//                        showDropDownMenu()
-//                        Toast.makeText(this@ClientDetails, "Add", Toast.LENGTH_SHORT).show()
-//                        true
-//                    }
-//                    R.id.menu_retired -> {
-//                        // Handle Retired option click
-//                        editModeOff()
-//                        displayRetiredExercises()
-//                        Toast.makeText(this@ClientDetails, "Retire", Toast.LENGTH_SHORT).show()
-//                        true
-//                    }
-//                    else -> false
-//                }
-//            }
-//            popupMenu.show()
-//        }
-
-//        //bottom navigation handling
-//        val btmView = binding.btmExerciseMenu
-//        btmView.setOnItemSelectedListener { item: MenuItem -> handleNavigationItemSelected(item)}
 
         //changing toggle bar
         binding.toggleButton.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

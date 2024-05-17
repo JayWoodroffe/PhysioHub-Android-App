@@ -62,11 +62,11 @@ class InvitationCode : AppCompatActivity() {
         val subject = "PhysioLink Invitation"
 
         val body = "Your physiotherapist, Dr. $doctorsName, has invited you to download and register for the application PhysioLink." +
-                "\n" +
+                "\n\n" +
                 "Invitation code: $invitationCode" +
-                "\nEnter this code into the application to register and access important exercise " +
+                "\n\nEnter this code into the application to register and access important exercise " +
                 "information from your doctor." +
-                "\n" +
+                "\n\n" +
                 "Welcome to the team,\nThe PhysioLink Team"
 
         val intent = Intent(Intent.ACTION_SEND)
