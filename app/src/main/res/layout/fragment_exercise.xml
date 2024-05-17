@@ -24,6 +24,13 @@
         android:verticalSpacing="8dp"
         android:horizontalSpacing="8dp"/> <!-- Adjust horizontal spacing as needed -->
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btmExerciseMenu"
         android:layout_width="match_parent"

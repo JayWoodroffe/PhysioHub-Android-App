@@ -3,6 +3,7 @@ package com.example.mypractice.data
 import android.util.Log
 import com.example.mypractice.model.ExerciseModel
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -111,37 +112,53 @@ object ExerciseDataAccess {
     }
 
     fun updateRetiredField(selectedIds: List<Int>, retired: Boolean, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        var completedOperations = 0 // Counter for tracking completed operations
+        val totalOperations = selectedIds.size // Total number of operations
+        var hasFailed = false // Flag to track if any operation has failed
+
         for (exerciseId in selectedIds) {
-            val query = collection.whereEqualTo("id", exerciseId)
+            val query = collection.whereEqualTo("id", exerciseId) // Query to find the exercise by id
             query.get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
-                        val documentSnapshot = querySnapshot.documents[0]
-                        val exerciseRef = documentSnapshot.reference
-                        // Update the field in the document
-                        exerciseRef.update("retired", retired)
+                        val documentSnapshot = querySnapshot.documents[0] // Get the first document
+                        val exerciseRef = documentSnapshot.reference // Get the reference to the document
+                        exerciseRef.update("retired", retired) // Update the "retired" field
                             .addOnSuccessListener {
-                                // Successfully updated the field
-                                Log.d("Firestore", "Successfully updated retired field for exercise with ID: $exerciseId")
+                                completedOperations++ // Increment the completed operations counter
+                                if (completedOperations == totalOperations && !hasFailed) {
+                                    onSuccess() // Call onSuccess() only if all operations are completed and none failed
+                                }
                             }
                             .addOnFailureListener { e ->
-                                // Failed to update the field
-                                Log.e("Firestore", "Failed to update retired field for exercise with ID: $exerciseId", e)
-                                onFailure(e)
+                                if (!hasFailed) {
+                                    hasFailed = true // Set the failure flag to true
+                                    onFailure(e) // Call onFailure() if an update operation fails
+                                }
                             }
                     } else {
-                        // No document with the specified id found
                         Log.d("Firestore", "No document found with id: $exerciseId")
+                        completedOperations++ // Increment the completed operations counter even if no document is found
+                        if (completedOperations == totalOperations && !hasFailed) {
+                            onSuccess() // Call onSuccess() if all operations are completed and none failed
+                        }
                     }
                 }
                 .addOnFailureListener { e ->
-                    onFailure(e)
+                    if (!hasFailed) {
+                        hasFailed = true // Set the failure flag to true
+                        onFailure(e) // Call onFailure() if the query fails
+                    }
                 }
         }
-        onSuccess()
     }
+
+
+    //deletes exercises from a list of IDs sent from exercise fragment
     fun deleteExercises(ids: List<Int>, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         val batch = db.batch()
+        val documentReferences = mutableListOf<DocumentReference>()
+
 
         for (id in ids) {
             val query = collection.whereEqualTo("id", id)
@@ -150,27 +167,32 @@ object ExerciseDataAccess {
                     if (!querySnapshot.isEmpty) {
                         val documentSnapshot = querySnapshot.documents[0]
                         val exerciseRef = documentSnapshot.reference
-                        batch.delete(exerciseRef)
-                        //commit the batch immediately after each delete operation
-                        batch.commit()
-                            .addOnFailureListener { e ->
-                                onFailure(e)
-                                return@addOnFailureListener
-                            }
-
+                        documentReferences.add(documentSnapshot.reference)
                     } else {
-                        // No document with the specified id found
                         Log.d("Firestore", "No document found with id: $id")
                     }
+                    // Once all references are collected, commit the batch
+                    if (documentReferences.size == ids.size) {
+                        documentReferences.forEach { ref ->
+                            batch.delete(ref)
+                        }
+                        batch.commit()
+                            .addOnSuccessListener {
+                                onSuccess()
+                            }
+                            .addOnFailureListener { e ->
+                                onFailure(e)
+                            }
+                    }
+
                 }
                 .addOnFailureListener { e ->
                     onFailure(e)
                     return@addOnFailureListener
                 }
         }
-
-
     }
+
 
     fun updateExercise(exercise: ExerciseModel, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         val query = collection.whereEqualTo("id", exercise.id)
