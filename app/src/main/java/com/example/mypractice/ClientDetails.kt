@@ -19,6 +19,7 @@ import com.example.mypractice.data.ExerciseDataAccess
 import com.example.mypractice.databinding.ActivityClientDetailsBinding
 import com.example.mypractice.model.ClientModel
 import com.example.mypractice.model.ExerciseModel
+import com.example.mypractice.utils.ClientDetailsFragment
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -30,6 +31,8 @@ class ClientDetails : AppCompatActivity() {
     private lateinit var clientId:String
     private lateinit var popupWindow: PopupWindow
     private lateinit var fragment : ExerciseFragment
+    private lateinit var chatFragment: ChatFragment
+    private lateinit var infoFragment: ClientDetailsFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientDetailsBinding.inflate(layoutInflater)
@@ -38,7 +41,7 @@ class ClientDetails : AppCompatActivity() {
         //getting the id of the selected client
         clientId = intent.getStringExtra("clientId").toString()
         Log.d("ClientDetails", "Client ID: $clientId")
-        setClientDetails()
+
         //hidings status and navigation bar
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -60,6 +63,11 @@ class ClientDetails : AppCompatActivity() {
         val bundle=Bundle()
         bundle.putString("clientID", clientId)
 
+        infoFragment = ClientDetailsFragment()
+        setClientDetails()
+
+        chatFragment = ChatFragment()
+        chatFragment.setClientId(clientId)
 
         fragment = ExerciseFragment()
         fragment.setClientId(clientId)
@@ -90,7 +98,7 @@ class ClientDetails : AppCompatActivity() {
                         "Exercises" -> {
                             // Show the ExerciseFragment
 
-                            hidePopUp()
+//                            hidePopUp()
                             showExerciseFragment()
                         }
                         // Add more cases for other tabs if needed
@@ -98,15 +106,16 @@ class ClientDetails : AppCompatActivity() {
                     when (it.text) {
                         "Chat" -> {
                             // Show the ExerciseFragment
-                            hidePopUp()
-                            hideExerciseFragment()
+                            showChatFragment()
+//                            hidePopUp()
+                            //hideExerciseFragment()
+
                         }
                         // Add more cases for other tabs if needed
                     }
                     when (it.text) {
                         "Info" -> {
-                            // Show the ExerciseFragment
-                            hideExerciseFragment()
+//                            hideExerciseFragment()
                             showPopup(it)
                         }
                         // Add more cases for other tabs if needed
@@ -123,75 +132,21 @@ class ClientDetails : AppCompatActivity() {
             }
 
         })
-
-//        binding.taskBar.cbSelectAll.setOnCheckedChangeListener{ _, isChecked->
-//            if(binding.taskBar.selectAllContainer.visibility == View.VISIBLE){
-//                if(isChecked)
-//                {
-//                    fragment.selectAll()
-//                }
-//                else
-//                {
-//                    fragment.deselectAll()
-//                }
-//                }
-//        }
-
-
-        //call button
-        //TODO add call feature to chat area
     }
 
-//    private fun editModeOn()
-//    {
-//        fragment.setSelectionMode(true)
-//        binding.taskBar.selectAllContainer.visibility=View.VISIBLE
-//        binding.btmExerciseMenu.visibility=View.VISIBLE
-//    }
-//
-//    private fun editModeOff()
-//    {
-//        fragment.deselectAll()
-//        fragment.setSelectionMode(false)
-//        binding.taskBar.selectAllContainer.visibility=View.GONE
-//        binding.taskBar.cbSelectAll.isChecked=false
-//        binding.btmExerciseMenu.visibility=View.GONE
-//    }
-//    private fun handleNavigationItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId){
-//            R.id.nav_back ->{
-//                editModeOff()
-//                return true
-//            }
-//            R.id.nav_retire ->{
-//                //TODO add code to retire exercises
-//                return true}
-//            R.id.nav_delete ->{
-//                deleteConfirmed(this)
-//                {
-//                    //TODO add code to delte exercises
-//                }
-//                return true}
-//            R.id.nav_settings ->{
-//                startActivity(Intent(this, Settings::class.java))
-//                return true}
-//            else -> return false
-//        }
-//    }
-
     private fun showExerciseFragment() {
-        val taskbar: View = findViewById(R.id.taskBar)
-        taskbar.visibility = View.VISIBLE
+//        val taskbar: View = findViewById(R.id.taskBar)
+//        taskbar.visibility = View.VISIBLE
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.show(fragment)
+        fragmentTransaction.replace(binding.exerciseFragmentContainer.id, fragment)
         fragmentTransaction.commit()
     }
 
     private fun hideExerciseFragment() {
-        val taskbar: View = findViewById(R.id.taskBar)
-        taskbar.visibility = View.GONE
+//        val taskbar: View = findViewById(R.id.taskBar)
+//        taskbar.visibility = View.GONE
 
         // Remove the ExerciseFragment from the container
         val fragmentManager = supportFragmentManager
@@ -200,113 +155,55 @@ class ClientDetails : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
+    private fun showChatFragment()
+    {
+//        val taskbar: View = findViewById(R.id.taskBar)
+//        taskbar.visibility = View.GONE
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(binding.exerciseFragmentContainer.id, chatFragment)
+        fragmentTransaction.commit()
+    }
+
+
+
     private fun showPopup(anchorView: TabLayout.Tab)
     {
-        val popupInfoLayout: View = findViewById(R.id.popupInfo)
-            popupInfoLayout.visibility = View.VISIBLE
+//        val popupInfoLayout: View = findViewById(R.id.popupInfo)
+//            popupInfoLayout.visibility = View.VISIBLE
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(binding.exerciseFragmentContainer.id, infoFragment)
+        fragmentTransaction.commit()
     }
 
-    private fun hidePopUp()
-    {
-        val popupInfoLayout: View = findViewById(R.id.popupInfo)
-        popupInfoLayout.visibility = View.GONE
-    }
+//    private fun hidePopUp()
+//    {
+//        val popupInfoLayout: View = findViewById(R.id.popupInfo)
+//        popupInfoLayout.visibility = View.GONE
+//    }
 
-//    private fun displayRetiredExercises()
-//    {
-//        binding.taskBar.retiredContainer.visibility=View.VISIBLE
-//        binding.taskBar.ivBack.setOnClickListener {
-//            displayActiveExercises()
-//        }
-//        ExerciseDataAccess.getRetiredExercisesForClient(clientId){ exerList: List<ExerciseModel> ->
-//            Log.d("Exercises", "# ${exerList.size}")
-//            fragment.setExercises(exerList)
-//        }
-//    }
-//    private fun displayActiveExercises()
-//    {
-//        binding.taskBar.retiredContainer.visibility=View.GONE
-//        ExerciseDataAccess.getActiveExercisesForClient(clientId){ exerList: List<ExerciseModel> ->
-//            Log.d("Exercises", "# ${exerList.size}")
-//            fragment.setExercises(exerList)
-//        }
-//    }
 
     private fun setClientDetails()
     {
         //querying the rest of the information about the client
         ClientDataAccess.getClientByID(clientId!!) { client: ClientModel? ->
             client?.let{
-                val name = it.name
-                val number = it.number?:""
-                val email = it.email?:""
-                val dob = it.dob
+                val client = ClientModel()
+                client.name = it.name
+                client.number = it.number?:""
+                client.email = it.email?:""
+                client.dob = it.dob
 
-                dob?.let{
-                    val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
-                    val age = it.calculateAge()
-                    binding.popupInfo.tvDobData.text = formattedDate
-                    binding.popupInfo.tvAgeData.text = age.toString()
-                }?:run{
-                    binding.popupInfo.tvDobData.text = "N/A"
-                }
+                binding.tvClientName?.text = client.name
 
-                binding.tvClientName?.text = name
-
-                binding.popupInfo.tvNumberData.text = number
-                binding.popupInfo.tvEmailData.text =  email
+                infoFragment.setClientDetails(client)
             } ?: run {
                 Log.d("ClientDetails", "No client found with ID: $clientId")
             }
         }
     }
 
-//    private fun showDropDownMenu()
-//    {
-//        val popupMenu = PopupMenu(this, binding.taskBar.ivExercisesMenu, Gravity.END)
-////            val inflater: MenuInflater = popupMenu.menuInflater
-////            val customLayout = layoutInflater.inflate(R.layout.exercises_menu, null)
-//
-//        popupMenu.menu.add(Menu.NONE, R.id.menu_addNew, Menu.NONE, "New")
-//        popupMenu.menu.add(Menu.NONE, R.id.menu_addExisting, Menu.NONE, "Pre-existing")
-//
-//        popupMenu.setOnMenuItemClickListener { menuItem ->
-//            when (menuItem.itemId) {
-//
-//                R.id.menu_addNew -> {true}
-//                R.id.menu_addExisting->{true}
-//
-//                else -> false
-//            }
-//        }
-//        popupMenu.show()
-//    }
-//    fun deleteConfirmed(context: Context, onDeleteConfirmed: () -> Unit) {
-//        val builder = AlertDialog.Builder(context)
-//        builder.setTitle("Delete Confirmation")
-//            .setMessage("Are you sure you want to delete the selected exercises?")
-//            .setPositiveButton("Delete") { dialog, _ ->
-//                // Call the onDeleteConfirmed callback when the user confirms deletion
-//                onDeleteConfirmed()
-//                dialog.dismiss()
-//            }
-//            .setNegativeButton("Cancel") { dialog, _ ->
-//                dialog.dismiss()
-//            }
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
 
-    private fun Date.calculateAge(): Int {
-        val currentDate = Calendar.getInstance().time
-        val dobCalendar = Calendar.getInstance().apply { time = this@calculateAge }
-
-        var age = Calendar.getInstance().get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR)
-
-        if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) < dobCalendar.get(Calendar.DAY_OF_YEAR)) {
-            age--
-        }
-
-        return age
-    }
 }
