@@ -41,7 +41,7 @@ class ClientDetailsFragment : Fragment() {
 
         binding.tvNumberData.text = client.number
         binding.tvEmailData.text =  client.email
-        
+
         return binding.root
     }
 
