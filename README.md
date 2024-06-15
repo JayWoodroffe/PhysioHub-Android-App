@@ -54,5 +54,5 @@ PhysioHub is an Android application designed to help physiotherapists manage the
 
 ## Documentation
 
-For more detailed information, you can refer to the [Project Documentation](./Documentation.pdf).
+For more detailed information, you can refer to the [Project Documentation](./docs/Documentation.pdf).
 
