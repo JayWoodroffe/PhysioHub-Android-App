@@ -41,16 +41,16 @@ PhysioHub is an Android application designed to help physiotherapists manage the
 ## Screenshots
 
 ### Dashboard
-![Dashboard](./images/dashboard.png)
+![Dashboard](./images/dashboard.jpg)
 
 ### Patients
-![Patients](./images/patients.png)
+![Patients](./images/patients.jpg)
 
 ### Exercises
-![Exercises](./images/exercises.png)
+![Exercises](./images/exercises.jpg)
 
 ### Chat
-![Chat](./images/chat.png)
+![Chat](./images/chat.jpg)
 
 ## License
 
