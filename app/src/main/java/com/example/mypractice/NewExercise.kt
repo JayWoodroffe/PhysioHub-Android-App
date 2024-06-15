@@ -27,6 +27,7 @@ class NewExercise : AppCompatActivity() {
         {
             exerciseModel = intent.getSerializableExtra("ExerciseModel") as ExerciseModel
             populateFields(exerciseModel)
+            setUpText()
         }
 
         binding.btnCreate.setOnClickListener {
@@ -45,6 +46,19 @@ class NewExercise : AppCompatActivity() {
         }
     }
 
+    private fun setUpText()
+    {
+        if(editMode)
+        {
+            binding.tvTitle.text = "Edit exercise"
+            binding.btnCreate.text = "Save"
+        }
+        else
+        {
+            binding.tvTitle.text = "Create new exercise"
+            binding.btnCreate.text = "Create"
+        }
+    }
     private fun populateFields(exerciseModel: ExerciseModel)
     {
         binding.etName.setText( exerciseModel.name)

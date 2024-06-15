@@ -12,9 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mypractice.data.AppointmentsDataAccess
 import com.example.mypractice.data.DoctorDataAccess
-import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityAddAppointmentBinding
-import com.example.mypractice.utils.FirebaseUtil
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Calendar

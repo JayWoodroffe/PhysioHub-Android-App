@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mypractice.data.AuthServices
 import com.example.mypractice.data.DoctorDataAccess
 import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityMainBinding
@@ -61,50 +60,6 @@ class Login : AppCompatActivity() {
             signInWithGoogle()
         }
 
-//        binding.btnLogin.setOnClickListener {
-//            //TODO add user authentication
-//            val email = binding.etEmail.text.toString()
-//            val password = binding.etPassword.text.toString()
-//            if (email?.isNullOrEmpty() == true || password?.isNullOrEmpty() == true)
-//            {
-//                Toast.makeText(this@Login, "Invalid login details, please try again", Toast.LENGTH_SHORT).show()
-//            }
-//            else{
-//                try {
-//
-//                    AuthServices.login(email, password,
-//                        onSuccess = {
-//                            //login successful
-//                            startActivity(Intent(this, Home::class.java))
-//                            finish()
-//                        },
-//                        onFailure = {
-//                            Toast.makeText(
-//                                this@Login,
-//                                "Invalid login details, please try again",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            Log.e("LoginActivity", "Login failed")
-//                        })
-//                }catch (e: Exception) {
-//                    // Handle any unexpected exceptions
-//                    Toast.makeText(
-//                        this@Login,
-//                        "An unexpected error occurred, please try again later",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    Log.e("LoginActivity", "Unexpected error during login", e)
-//                }
-//            }
-//
-//
-//        }
-
-
-//        binding.tvRegister.setOnClickListener {
-//            startActivity(Intent(this, RegisterContact::class.java))
-//
-//        }
     }
     private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent

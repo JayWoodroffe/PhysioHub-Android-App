@@ -13,7 +13,6 @@ import com.example.mypractice.data.DoctorDataAccess
 import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityClientsBinding
 import com.example.mypractice.model.ClientModel
-import com.example.mypractice.utils.FirebaseUtil
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
 

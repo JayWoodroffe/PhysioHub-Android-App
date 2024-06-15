@@ -12,12 +12,8 @@ import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityHomeBinding
 import com.example.mypractice.model.Appointment
 import com.example.mypractice.model.DoctorModel
-import com.example.mypractice.utils.FirebaseUtil
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 

@@ -11,12 +11,10 @@ import com.example.mypractice.data.ClientDataAccess
 import com.example.mypractice.data.DoctorDataHolder
 import com.example.mypractice.databinding.ActivityAddClientBinding
 import com.example.mypractice.model.ClientModel
-import com.example.mypractice.utils.FirebaseUtil
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import kotlin.properties.Delegates
 
 class AddClient : AppCompatActivity() {
 

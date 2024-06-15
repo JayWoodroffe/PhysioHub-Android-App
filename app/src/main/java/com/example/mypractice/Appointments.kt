@@ -15,13 +15,10 @@ import androidx.core.content.ContextCompat
 import com.example.mypractice.data.AppointmentsDataAccess
 import com.example.mypractice.databinding.ActivityAppointmentsBinding
 import com.example.mypractice.model.Appointment
-import com.example.mypractice.utils.FirebaseUtil
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.Query
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 

@@ -54,6 +54,7 @@ class ChatFragment : Fragment() {
             messages.clear()
             messages.addAll(newMessages)
             messageAdapter.notifyDataSetChanged()
+            binding.recyclerViewMessages.scrollToPosition(messageAdapter.itemCount - 1)
         }
 
         // Send message on button click

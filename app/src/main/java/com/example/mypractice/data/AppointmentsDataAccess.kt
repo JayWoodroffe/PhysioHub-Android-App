@@ -1,20 +1,16 @@
 package com.example.mypractice.data
 
 import android.util.Log
-import com.example.mypractice.Appointments
 import com.example.mypractice.model.Appointment
-import com.example.mypractice.utils.FirebaseUtil
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 object AppointmentsDataAccess {
+    private val db = FirebaseFirestore.getInstance()
     fun getNextAppointment(certId: String,  callback: (Appointment?) -> Unit) {
         val currentTimeStamp: Timestamp = Timestamp.now()
-        val appointmentsCollectionRef = FirebaseUtil.allAppointmentsCollectionReference()
+        val appointmentsCollectionRef = db.collection("appointments")
 
         val query = appointmentsCollectionRef
             .whereEqualTo("doctorCertId", certId)
