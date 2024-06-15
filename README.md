@@ -25,7 +25,7 @@ PhysioHub is an Android application designed to help physiotherapists manage the
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/yourusername/physiohub`
+1. Clone the repository: `https://github.com/JayWoodroffe/PhysioHub-Android-App.git`
 2. Open the project in Android Studio.
 3. Set up Firebase in your project by following the [Firebase setup guide](https://firebase.google.com/docs/android/setup).
 4. Build and run the app on an Android device or emulator.
